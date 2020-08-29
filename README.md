@@ -7,7 +7,7 @@ A new Flutter application.
 You can find a proper eplaination about this project structure [here](https://dev.to/rafatmeraz/how-to-organize-a-flutter-project-2cpf).
 
 # Pirox
-## Blood Donate App
+## Blood Donating App
 
 ### Main Features that app will cover:
 - **A Blood donating app**
