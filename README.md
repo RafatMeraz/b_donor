@@ -1,12 +1,3 @@
-# organize_flutter_project
-
-A new Flutter application.
-
-## Getting Started
-
-You can find a proper eplaination about this project structure [here](https://dev.to/rafatmeraz/how-to-organize-a-flutter-project-2cpf).
-
-# Pirox
 ## Blood Donating App
 
 ### Main Features that app will cover:
@@ -48,3 +39,5 @@ You can find a proper eplaination about this project structure [here](https://de
 -	**Exercise Suggestion**
     -	This will help with basic exercise suggestion.
     - showing basic steps & directions, limits, with their benefits.
+    
+  Developed by **Pirox**
