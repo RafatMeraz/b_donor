@@ -38,62 +38,16 @@ class _BecomeDonorState extends State<BecomeDonor> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 10),
-                TextField(
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: kBlackColor,
-                      letterSpacing: 0.3,
-                      fontWeight: FontWeight.w400),
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    fillColor: kGreyColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
-                      ),
-                      borderSide:
-                          BorderSide(width: 0, color: Colors.transparent),
-                    ),
-                    hintText: 'Name',
-                    filled: true,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
-                      ),
-                      borderSide:
-                          BorderSide(width: 0, color: Colors.transparent),
-                    ),
-                  ),
+                RoundedTextField(
+                  hint: 'Name',
+                  controller: null,
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                TextField(
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: kBlackColor,
-                      letterSpacing: 0.3,
-                      fontWeight: FontWeight.w400),
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    fillColor: kGreyColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
-                      ),
-                      borderSide:
-                          BorderSide(width: 0, color: Colors.transparent),
-                    ),
-                    hintText: 'E-Mail',
-                    filled: true,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30.0),
-                      ),
-                      borderSide:
-                          BorderSide(width: 0, color: Colors.transparent),
-                    ),
-                  ),
+                RoundedTextField(
+                  hint: 'E-Mail',
+                  controller: null,
                 ),
                 SizedBox(height: 20),
                 Text('Gender',

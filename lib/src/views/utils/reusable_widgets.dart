@@ -94,3 +94,42 @@ class RoundedGradientColorButton extends StatelessWidget {
     );
   }
 }
+
+class RoundedTextField extends StatelessWidget {
+  RoundedTextField({@required this.hint, @required this.controller});
+  final String hint;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(
+          fontSize: 14,
+          color: kBlackColor,
+          letterSpacing: 0.3,
+          fontWeight: FontWeight.w400),
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        fillColor: kGreyColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
+          ),
+          borderSide:
+          BorderSide.none,
+        ),
+        hintText: '$hint',
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
+          ),
+          borderSide:
+          BorderSide.none,
+        ),
+      ),
+    );
+  }
+}

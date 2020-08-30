@@ -46,7 +46,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
               children: <Widget>[
                 Container(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: Text(
                       '+8801',
                       style: TextStyle(
@@ -73,12 +73,13 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       fillColor: kGreyColor,
+                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(30.0),
                         ),
                         borderSide:
-                            BorderSide(width: 0, color: Colors.transparent),
+                            BorderSide.none,
                       ),
                       hintText: 'Enter your phone number',
                       filled: true,
@@ -86,8 +87,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
                         borderRadius: BorderRadius.all(
                           Radius.circular(30.0),
                         ),
-                        borderSide:
-                            BorderSide(width: 0, color: Colors.transparent),
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
