@@ -1,5 +1,5 @@
 # B Donor
-People will be connecting with each other to find or donate blood for saving life. An app to remove all blood donating/recieving crisis including features of getting user updates, helth suggesions, which will creat an environment of the best blood donating social platform at any emergency.
+People will be connecting with each other to find or donate blood for saving life. An app to remove all blood donating/recieving crisis including features of getting user updates, health suggesions, which will creat an environment of the best blood donating social platform at any emergency.
 ## Blood Donating App
 ### Main Features that app will cover:
 - **A Blood donating app**
