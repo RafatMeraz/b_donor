@@ -15,8 +15,8 @@
   - Find blood donor. Here available donor will be showed.
   - Request list for user who wants to donate.
 -	**Type of blood donating**
-    - [ ] Whole blood donate.
-    - [ ] Plasma donate.
+    - Whole blood donate.
+    - Plasma donate.
       - These options will be set by users that what type of blood is available for him to donate. This can be shown in the bottom of each Find blood/See requests that what type or both is available (set by the users). Since one can donate plasma once in month where whole blood can be donated once in every 3 months.
 - **Area based blood donors**
   - This will cover the area i.e. Dhaka city, and when someone looking for donor, s/he will find them in area by location he’s looking for. Every users will set their location. Also GPS can be used.
