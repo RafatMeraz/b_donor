@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/views/ui/become_donor.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyMobileNumber extends StatefulWidget {
@@ -27,6 +28,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          SizedBox(height: 10),
           Container(
               margin: EdgeInsets.symmetric(horizontal: 16),
               child: Text('Verify Number',
@@ -96,102 +98,85 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
           SizedBox(
             height: 30,
           ),
-          InkWell(
-            onTap: () {
-              otpTextController = TextEditingController(text: '');
-              showDialog(
-                barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(20.0)), //this right here
-                      child: Container(
-                        height: 200,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(margin: EdgeInsets.only(left: 16),child: Text('Confirm verification code', style: TextStyle(fontSize: 14, color: kBlackColor))),
-                              SizedBox(height: 10),
-                              _buildPinCodeView(
-                                  otpTextController, focusNode, TextInputAction.done),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  FlatButton(
-                                    child: Text('Re-send', style: TextStyle(color: kPurpleColor, fontSize: 15)),
-                                    onPressed: (){
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            child: RoundedGradientColorButton(
+              onTap: (){
+                otpTextController = TextEditingController(text: '');
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(20.0)), //this right here
+                        child: Container(
+                          height: 200,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(margin: EdgeInsets.only(left: 16),child: Text('Confirm verification code', style: TextStyle(fontSize: 14, color: kBlackColor))),
+                                SizedBox(height: 10),
+                                _buildPinCodeView(
+                                    otpTextController, focusNode, TextInputAction.done),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    FlatButton(
+                                      child: Text('Re-send', style: TextStyle(color: kPurpleColor, fontSize: 15)),
+                                      onPressed: (){
 
-                                    },
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  InkWell(
-                                    onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => BecomeDonor()
-                                      ));
-                                    },
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      margin: EdgeInsets.symmetric(horizontal: 16),
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          color: kPurpleColor,
-                                          gradient: LinearGradient(colors: [
-                                            const Color(0xFFFF2156),
-                                            const Color(0xFFFF4D4D),
-                                          ]),
-                                          borderRadius: BorderRadius.circular(30)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Text(
-                                          'OK',
-                                          style: TextStyle(
-                                            color: kWhiteColor,
-                                            fontSize: 14
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.push(context, MaterialPageRoute(
+                                            builder: (context) => BecomeDonor()
+                                        ));
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.symmetric(horizontal: 16),
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            color: kPurpleColor,
+                                            gradient: LinearGradient(colors: [
+                                              const Color(0xFFFF2156),
+                                              const Color(0xFFFF4D4D),
+                                            ]),
+                                            borderRadius: BorderRadius.circular(30)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Text(
+                                            'OK',
+                                            style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontSize: 14
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  });
-            },
-            child: Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                  color: kPurpleColor,
-                  gradient: LinearGradient(colors: [
-                    const Color(0xFFFF2156),
-                    const Color(0xFFFF4D4D),
-                  ]),
-                  borderRadius: BorderRadius.circular(30)),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'GET OTP',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: kWhiteColor,
-                  ),
-                ),
-              ),
+                      );
+                    });
+              },
+              text: 'GET OTP',
             ),
           ),
           SizedBox(

@@ -28,6 +28,7 @@ dependencies:
   path_provider: ^1.6.14
   intro_views_flutter: ^2.8.1
   pin_code_fields:
+  group_button: ^1.0.1
 
 dev_dependencies:
   flutter_test:

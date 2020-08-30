@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'contants.dart';
+
 class RoundedRaisedButton extends StatelessWidget {
   RoundedRaisedButton(
       {@required this.text,
@@ -51,6 +53,40 @@ class RoundedRaisedButton extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 )
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RoundedGradientColorButton extends StatelessWidget {
+  RoundedGradientColorButton({@required this.text, @required this.onTap});
+
+  final String text;
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: kPurpleColor,
+            gradient: LinearGradient(colors: [
+              const Color(0xFFFF2156),
+              const Color(0xFFFF4D4D),
+            ]),
+            borderRadius: BorderRadius.circular(30)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            '$text',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: kWhiteColor,
             ),
           ),
         ),
