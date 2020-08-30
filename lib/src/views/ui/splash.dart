@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
-import 'package:organize_flutter_project/src/views/ui/intro_one.dart';
+import 'package:organize_flutter_project/src/views/ui/intro_screen.dart';
 import 'package:organize_flutter_project/src/views/ui/login_register.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 
@@ -18,7 +18,7 @@ class _SplashState extends State<Splash> {
     Timer(
         Duration(seconds: 3),
         () async => await isFirstValue() ?  Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => IntroOne())) : Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => IntroScreen())) : Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => LoginRegister()))
     );
   }
