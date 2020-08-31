@@ -188,13 +188,190 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Icon(Icons.add_circle_outline, color: kPurpleColor),
                         Text('Post Update', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kPurpleColor)),
-
                       ],
                     ),
                   )
                 ],
               ),
-            )
+            ),
+            SizedBox(height: 5),
+            Container(
+              color: kWhiteColor,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: kPurpleColor,
+                          backgroundImage: AssetImage('assets/images/user-img.jpg'),
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Jym Ben', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            SizedBox(height: 5),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.access_time, color: kBorderGreyColor, size: 16,),
+                                SizedBox(width: 5),
+                                Text('6m age', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBorderGreyColor)),
+                                SizedBox(width: 15),
+                                Icon(Icons.location_on, color: kBorderGreyColor, size: 16,),
+                                SizedBox(width: 5),
+                                Text('Mubmai', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBorderGreyColor)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Image.asset('assets/images/donate-blood.png', width: MediaQuery.of(context).size.width, height: 290, fit: BoxFit.cover),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.favorite_border, size: 20),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(width: 1, color: kGreyColor)
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              '87434',
+                              style: TextStyle(
+                                  color: kBorderGreyColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.share, size: 20),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(width: 1, color: kGreyColor)
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem',
+                          style: TextStyle(
+                            color: kTextGreyColor,
+                            fontSize: 12
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              color: kWhiteColor,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: kPurpleColor,
+                          backgroundImage: AssetImage('assets/images/user-img.jpg'),
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Jym Ben', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            SizedBox(height: 5),
+                            Row(
+                              children: <Widget>[
+                                Icon(Icons.access_time, color: kBorderGreyColor, size: 16,),
+                                SizedBox(width: 5),
+                                Text('6m age', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBorderGreyColor)),
+                                SizedBox(width: 15),
+                                Icon(Icons.location_on, color: kBorderGreyColor, size: 16,),
+                                SizedBox(width: 5),
+                                Text('Mubmai', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBorderGreyColor)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Image.asset('assets/images/donate-blood.png', width: MediaQuery.of(context).size.width, height: 290, fit: BoxFit.cover),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.favorite_border, size: 20),
+                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(width: 1, color: kGreyColor)
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              '87434',
+                              style: TextStyle(
+                                  color: kBorderGreyColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.share, size: 20),
+                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(width: 1, color: kGreyColor)
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem',
+                          style: TextStyle(
+                              color: kTextGreyColor,
+                              fontSize: 12
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
