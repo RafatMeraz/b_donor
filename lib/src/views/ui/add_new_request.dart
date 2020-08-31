@@ -36,14 +36,14 @@ class _AddNewRequestState extends State<AddNewRequest> {
                 controller: null,
                 hint: 'Address',
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               Text('Blood for', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kBlackColor)),
               SizedBox(height: 10),
               RoundedTextField(
                 controller: null,
                 hint: 'Blood for',
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               Text('Select Blood Group',
                   style:
                   TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),

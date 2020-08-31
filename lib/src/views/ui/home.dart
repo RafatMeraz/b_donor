@@ -23,7 +23,17 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Drawer Header'),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('B Donor', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: kWhiteColor)),
+                    SizedBox(height: 5),
+                    Text('Donate and Save Life', style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: kWhiteColor)),
+                  ],
+                ),
+              ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -34,17 +44,45 @@ class _HomeState extends State<Home> {
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
+              leading: Icon(Icons.person, color: kPurpleColor, size: 20),
+              title: Text('Profile'),
               onTap: () {
-                // Update the state of the app.
-                // ...
+
               },
             ),
             ListTile(
-              title: Text('Item 2'),
+              leading: Icon(Icons.fitness_center, color: kPurpleColor, size: 20),
+              title: Text('Exercise Guidelines'),
               onTap: () {
-                // Update the state of the app.
-                // ...
+
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.fastfood, color: kPurpleColor, size: 20),
+              title: Text('Diet Chart'),
+              onTap: () {
+
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.phone_in_talk, color: kPurpleColor, size: 20),
+              title: Text('Emergency Help'),
+              onTap: () {
+
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.live_help, color: kPurpleColor, size: 20),
+              title: Text('About'),
+              onTap: () {
+
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app, color: kPurpleColor, size: 20),
+              title: Text('Exit'),
+              onTap: () {
+
               },
             ),
           ],
