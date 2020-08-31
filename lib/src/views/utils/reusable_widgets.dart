@@ -19,41 +19,22 @@ class RoundedRaisedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(5),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minWidth: double.infinity),
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        width: 190,
         child: RaisedButton(
           elevation: 4,
           color: backgroundColor,
           onPressed: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: imageLink == null
-                ? Text(
+            padding: const EdgeInsets.all(18.0),
+            child: Text(
               text,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 12,
                   color: textColor,
-                  fontWeight: FontWeight.w400),
+                  fontWeight: FontWeight.bold),
             )
-                : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 25,
-                  height: 25,
-                  child: Image.asset(imageLink),
-                ),
-                SizedBox(width: 20),
-                Text(
-                  text,
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: textColor,
-                      fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
           ),
         ),
       ),
