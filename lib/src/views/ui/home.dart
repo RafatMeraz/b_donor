@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/views/ui/all_requests.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
+import 'package:organize_flutter_project/src/views/ui/profile.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
@@ -10,7 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  bool donorMode = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -44,10 +46,27 @@ class _HomeState extends State<Home> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.invert_colors, color: kPurpleColor, size: 20),
+              title: Text('Donor Mode'),
+              trailing: Transform.scale(
+                scale: 0.7,
+                child: CupertinoSwitch(
+                  activeColor: kDarkPurpleColor,
+                  trackColor: kSoftBlueColor,
+                  value: donorMode,
+                  onChanged: (val){
+                    setState(() {
+                      donorMode = val;
+                    });
+                  },
+                ),
+              ),
+            ),
+            ListTile(
               leading: Icon(Icons.person, color: kPurpleColor, size: 20),
               title: Text('Profile'),
               onTap: () {
-
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
               },
             ),
             ListTile(
