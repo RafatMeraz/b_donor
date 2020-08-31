@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
@@ -130,7 +131,11 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                           RoundedRaisedButton(
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => ExploreAllDonors()
+                              ));
+                            },
                             backgroundColor: kWhiteColor,
                             text: 'FIND DONOR',
                             textColor: kPurpleColor,

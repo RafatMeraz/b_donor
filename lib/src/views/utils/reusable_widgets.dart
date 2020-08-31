@@ -42,6 +42,47 @@ class RoundedRaisedButton extends StatelessWidget {
   }
 }
 
+class RoundedBorderedRaisedButton extends StatelessWidget {
+  RoundedBorderedRaisedButton(
+      {@required this.text,
+        @required this.textColor,
+        @required this.imageLink,
+        @required this.onTap,
+        @required this.backgroundColor});
+
+  final Function onTap;
+  final String text;
+  final Color backgroundColor;
+  final Color textColor;
+  final String imageLink;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 190,
+      child: RaisedButton(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+            side: BorderSide(color: kBorderGreyColor, width: 1)
+        ),
+        color: backgroundColor,
+        onPressed: onTap,
+        child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Text(
+              text,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: textColor,
+                  fontWeight: FontWeight.bold),
+            )
+        ),
+      ),
+    );
+  }
+}
+
 class RoundedGradientColorButton extends StatelessWidget {
   RoundedGradientColorButton({@required this.text, @required this.onTap});
 
