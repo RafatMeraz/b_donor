@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organize_flutter_project/src/views/ui/all_requests.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
@@ -165,7 +166,11 @@ class _HomeState extends State<Home> {
                           ),
                           SizedBox(width: 30),
                           RoundedRaisedButton(
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => AllRequests()
+                              ));
+                            },
                             backgroundColor: kWhiteColor,
                             text: 'SEE REQUEST',
                             textColor: kPurpleColor,
