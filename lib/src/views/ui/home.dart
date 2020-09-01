@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/views/ui/all_requests.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
+import 'package:organize_flutter_project/src/views/ui/post_activity.dart';
 import 'package:organize_flutter_project/src/views/ui/profile.dart';
 import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
@@ -262,7 +263,9 @@ class _HomeState extends State<Home> {
                           fontWeight: FontWeight.bold,
                           color: kBlackColor)),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => PostActivity()));
+                    },
                     child: Row(
                       children: <Widget>[
                         Icon(Icons.add_circle_outline, color: kPurpleColor),
