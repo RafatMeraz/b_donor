@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/views/ui/all_requests.dart';
+import 'package:organize_flutter_project/src/views/ui/diet_chart.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
 import 'package:organize_flutter_project/src/views/ui/post_activity.dart';
 import 'package:organize_flutter_project/src/views/ui/profile.dart';
@@ -86,7 +87,9 @@ class _HomeState extends State<Home> {
             ListTile(
               leading: Icon(Icons.fastfood, color: kPurpleColor, size: 20),
               title: Text('Diet Chart'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DietChart()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.phone_in_talk, color: kPurpleColor, size: 20),
