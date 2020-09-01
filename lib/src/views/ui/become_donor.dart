@@ -41,6 +41,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
                 RoundedTextField(
                   hint: 'Name',
                   controller: null,
+                  textInputType: TextInputType.text,
                 ),
                 SizedBox(
                   height: 15,
@@ -48,6 +49,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
                 RoundedTextField(
                   hint: 'E-Mail',
                   controller: null,
+                  textInputType: TextInputType.emailAddress,
                 ),
                 SizedBox(height: 20),
                 Text('Gender',

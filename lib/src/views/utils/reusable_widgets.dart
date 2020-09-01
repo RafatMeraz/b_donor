@@ -181,10 +181,10 @@ class RoundedGradientColorButton extends StatelessWidget {
 }
 
 class RoundedTextField extends StatelessWidget {
-  RoundedTextField({@required this.hint, @required this.controller});
+  RoundedTextField({@required this.hint, @required this.controller, @required this.textInputType});
   final String hint;
   final TextEditingController controller;
-
+  final TextInputType textInputType;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -194,7 +194,7 @@ class RoundedTextField extends StatelessWidget {
           color: kBlackColor,
           letterSpacing: 0.3,
           fontWeight: FontWeight.w400),
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: textInputType,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         fillColor: kGreyColor,

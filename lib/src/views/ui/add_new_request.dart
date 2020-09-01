@@ -35,15 +35,81 @@ class _AddNewRequestState extends State<AddNewRequest> {
               RoundedTextField(
                 controller: null,
                 hint: 'Address',
+                textInputType: TextInputType.text,
               ),
               SizedBox(height: 30),
               Text('Blood for', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kBlackColor)),
               SizedBox(height: 10),
               RoundedTextField(
                 controller: null,
-                hint: 'Blood for',
+                hint: 'Father, mother or friend',
+                textInputType: TextInputType.text,
               ),
               SizedBox(height: 30),
+              Text('Amount', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kBlackColor)),
+              SizedBox(height: 10),
+              RoundedTextField(
+                controller: null,
+                hint: 'Maximum 10 units',
+                textInputType: TextInputType.number,
+              ),
+              SizedBox(height: 30),
+              Text('Contact', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kBlackColor)),
+              SizedBox(height: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        '+8801',
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: kBlackColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        color: kGreyColor,
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: kBlackColor,
+                          letterSpacing: 0.5,
+                          fontWeight: FontWeight.w500),
+                      maxLength: 9,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        fillColor: kGreyColor,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30.0),
+                          ),
+                          borderSide:
+                          BorderSide.none,
+                        ),
+                        hintText: 'Enter your phone number',
+                        filled: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30.0),
+                          ),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
               Text('Select Blood Group',
                   style:
                   TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
