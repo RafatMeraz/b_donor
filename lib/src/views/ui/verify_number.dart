@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/views/ui/become_donor.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
@@ -18,6 +19,8 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
   String phoneNo, smsCode, verificationId;
   PhoneAuthCredential _phoneAuthCredential;
   FirebaseApp defaultApp;
+  bool inProgress = false;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,9 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
   }
 
   Future<void> _submitPhoneNumber() async {
+    setState(() {
+      inProgress = true;
+    });
     String phoneNumber = "+8801" + _phoneNumberController.text.toString().trim();
     print(phoneNumber);
 
@@ -44,6 +50,9 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
     }
 
     void codeSent(String verificationId, [int code]) {
+      setState(() {
+        inProgress = false;
+      });
       print('codeSent');
       otpTextController = TextEditingController(text: '');
       showDialog(
@@ -75,27 +84,23 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment
-                            .end,
+                            .spaceBetween,
                         children: <Widget>[
-//                          FlatButton(
-//                            child: Text('Re-send', style: TextStyle(
-//                                color: kPurpleColor, fontSize: 15)),
-//                            onPressed: () {
-//
-//                            },
-//                          ),
+                          FlatButton(
+                            child: Text('Re-send', style: TextStyle(
+                                color: kPurpleColor, fontSize: 15)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              _submitPhoneNumber();
+                            },
+                          ),
                           SizedBox(
                             width: 20,
                           ),
                           InkWell(
                             onTap: () {
                               Navigator.of(context).pop();
-                              FirebaseUser user = FirebaseAuth.instance.currentUser;
-                              if (user != null) {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
-                              } else {
                                 signIn();
-                              }
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -138,7 +143,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
 
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
-      timeout: Duration(milliseconds: 10000),
+      timeout: Duration(minutes: 2),
       verificationCompleted: verificationCompleted,
       verificationFailed: verificationFailed,
       codeSent: codeSent,
@@ -147,11 +152,20 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
   }
   
   signIn(){
+    setState(() {
+      inProgress = true;
+    });
     FirebaseAuth.instance
         .signInWithCredential(_phoneAuthCredential)
         .then((value) {
+      setState(() {
+        inProgress = false;
+      });
       Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
     }).catchError((onError){
+      setState(() {
+        inProgress = false;
+      });
       print(onError.toString());
     });
   }
@@ -167,176 +181,113 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
         ),
       ),
       backgroundColor: kWhiteColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(height: 10),
-          Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              child: Text('Verify Number',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: kBlackColor))),
-          SizedBox(
-            height: 20,
+      body: ModalProgressHUD(
+        inAsyncCall: inProgress,
+        color: Colors.black87,
+        progressIndicator: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            color: kPurpleColor,
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      '+8801',
+          padding: EdgeInsets.all(20),
+          child: CircularProgressIndicator(
+            backgroundColor: kWhiteColor,
+            valueColor: AlwaysStoppedAnimation<Color>(kBlackColor),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 10),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Verify Number',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: kBlackColor))),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        '+8801',
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: kBlackColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        color: kGreyColor,
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _phoneNumberController,
                       style: TextStyle(
                           fontSize: 14,
                           color: kBlackColor,
+                          letterSpacing: 0.5,
                           fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      color: kGreyColor,
-                      borderRadius: BorderRadius.circular(30)),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _phoneNumberController,
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: kBlackColor,
-                        letterSpacing: 0.5,
-                        fontWeight: FontWeight.w500),
-                    maxLength: 9,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      fillColor: kGreyColor,
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30.0),
+                      maxLength: 9,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        fillColor: kGreyColor,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30.0),
+                          ),
+                          borderSide:
+                          BorderSide.none,
                         ),
-                        borderSide:
-                        BorderSide.none,
-                      ),
-                      hintText: 'Enter your phone number',
-                      filled: true,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30.0),
+                        hintText: 'Enter your phone number',
+                        filled: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30.0),
+                          ),
+                          borderSide: BorderSide.none,
                         ),
-                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            child: RoundedGradientColorButton(
-              onTap: () {
-//                otpTextController = TextEditingController(text: '');
-//                showDialog(
-//                    barrierDismissible: false,
-//                    context: context,
-//                    builder: (BuildContext context) {
-//                      return Dialog(
-//                        shape: RoundedRectangleBorder(
-//                            borderRadius:
-//                            BorderRadius.circular(20.0)), //this right here
-//                        child: Container(
-//                          height: 200,
-//                          child: Padding(
-//                            padding: const EdgeInsets.all(12.0),
-//                            child: Column(
-//                              mainAxisAlignment: MainAxisAlignment.center,
-//                              crossAxisAlignment: CrossAxisAlignment.start,
-//                              children: [
-//                                Container(margin: EdgeInsets.only(left: 16),
-//                                    child: Text('Confirm verification code',
-//                                        style: TextStyle(
-//                                            fontSize: 14, color: kBlackColor))),
-//                                SizedBox(height: 10),
-//                                _buildPinCodeView(
-//                                    otpTextController, focusNode,
-//                                    TextInputAction.done),
-//                                SizedBox(
-//                                  height: 20,
-//                                ),
-//                                Row(
-//                                  mainAxisAlignment: MainAxisAlignment
-//                                      .spaceBetween,
-//                                  children: <Widget>[
-//                                    FlatButton(
-//                                      child: Text('Re-send', style: TextStyle(
-//                                          color: kPurpleColor, fontSize: 15)),
-//                                      onPressed: () {
-//
-//                                      },
-//                                    ),
-//                                    SizedBox(
-//                                      width: 20,
-//                                    ),
-//                                    InkWell(
-//                                      onTap: () {
-//                                        Navigator.push(
-//                                            context, MaterialPageRoute(
-//                                            builder: (context) => BecomeDonor()
-//                                        ));
-//                                      },
-//                                      child: Container(
-//                                        alignment: Alignment.center,
-//                                        margin: EdgeInsets.symmetric(
-//                                            horizontal: 16),
-//                                        width: 100,
-//                                        decoration: BoxDecoration(
-//                                            color: kPurpleColor,
-//                                            gradient: LinearGradient(colors: [
-//                                              const Color(0xFFFF2156),
-//                                              const Color(0xFFFF4D4D),
-//                                            ]),
-//                                            borderRadius: BorderRadius.circular(
-//                                                30)),
-//                                        child: Padding(
-//                                          padding: const EdgeInsets.all(12.0),
-//                                          child: Text(
-//                                            'OK',
-//                                            style: TextStyle(
-//                                                color: kWhiteColor,
-//                                                fontSize: 14
-//                                            ),
-//                                          ),
-//                                        ),
-//                                      ),
-//                                    ),
-//                                  ],
-//                                )
-//                              ],
-//                            ),
-//                          ),
-//                        ),
-//                      );
-//                    });
-                _submitPhoneNumber();
-              },
-              text: 'GET OTP',
+            SizedBox(
+              height: 30,
             ),
-          ),
-          SizedBox(
-            height: 20,
-          )
-        ],
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              child: RoundedGradientColorButton(
+                onTap: () {
+                  if (_phoneNumberController.text.trim().length == 9){
+                    _submitPhoneNumber();
+                  } else {
+                    showErrorToast('Enter your valid phone number!');
+                  }
+                },
+                text: 'GET OTP',
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            )
+          ],
+        ),
       ),
     );
   }

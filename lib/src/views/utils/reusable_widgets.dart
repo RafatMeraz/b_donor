@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
 import 'contants.dart';
@@ -217,4 +218,8 @@ class RoundedTextField extends StatelessWidget {
       ),
     );
   }
+}
+
+showErrorToast(String message) {
+  BotToast.showText(text: message, borderRadius: BorderRadius.circular(30), contentColor: kDarkPurpleColor, textStyle: TextStyle(color: kWhiteColor));
 }
