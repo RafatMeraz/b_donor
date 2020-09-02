@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/views/ui/become_donor.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class VerifyMobileNumber extends StatefulWidget {
   @override
@@ -11,8 +13,148 @@ class VerifyMobileNumber extends StatefulWidget {
 
 class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
   TextEditingController otpTextController = TextEditingController(text: '');
-
+  TextEditingController _phoneNumberController;
   final focusNode = FocusNode();
+  String phoneNo, smsCode, verificationId;
+  PhoneAuthCredential _phoneAuthCredential;
+  FirebaseApp defaultApp;
+  @override
+  void initState() {
+    super.initState();
+    _phoneNumberController = TextEditingController();
+    initilialize();
+  }
+
+  initilialize() async {
+    defaultApp = await Firebase.initializeApp();
+  }
+
+  Future<void> _submitPhoneNumber() async {
+    String phoneNumber = "+8801" + _phoneNumberController.text.toString().trim();
+    print(phoneNumber);
+
+    void verificationCompleted(AuthCredential phoneAuthCredential) {
+      print('verificationCompleted');
+      this._phoneAuthCredential = phoneAuthCredential;
+      print(phoneAuthCredential);
+    }
+
+    void verificationFailed(FirebaseAuthException error) {
+      print(error);
+    }
+
+    void codeSent(String verificationId, [int code]) {
+      print('codeSent');
+      otpTextController = TextEditingController(text: '');
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(20.0)), //this right here
+              child: Container(
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(margin: EdgeInsets.only(left: 16),
+                          child: Text('Confirm verification code',
+                              style: TextStyle(
+                                  fontSize: 14, color: kBlackColor))),
+                      SizedBox(height: 10),
+                      _buildPinCodeView(
+                          otpTextController, focusNode,
+                          TextInputAction.done),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .end,
+                        children: <Widget>[
+//                          FlatButton(
+//                            child: Text('Re-send', style: TextStyle(
+//                                color: kPurpleColor, fontSize: 15)),
+//                            onPressed: () {
+//
+//                            },
+//                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              FirebaseUser user = FirebaseAuth.instance.currentUser;
+                              if (user != null) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
+                              } else {
+                                signIn();
+                              }
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 16),
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: kPurpleColor,
+                                  gradient: LinearGradient(colors: [
+                                    const Color(0xFFFF2156),
+                                    const Color(0xFFFF4D4D),
+                                  ]),
+                                  borderRadius: BorderRadius.circular(
+                                      30)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(
+                                  'OK',
+                                  style: TextStyle(
+                                      color: kWhiteColor,
+                                      fontSize: 14
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    }
+
+    void codeAutoRetrievalTimeout(String verificationId) {
+      print('codeAutoRetrievalTimeout');
+    }
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: Duration(milliseconds: 10000),
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed,
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    );
+  }
+  
+  signIn(){
+    FirebaseAuth.instance
+        .signInWithCredential(_phoneAuthCredential)
+        .then((value) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
+    }).catchError((onError){
+      print(onError.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +206,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
                 ),
                 Expanded(
                   child: TextField(
+                    controller: _phoneNumberController,
                     style: TextStyle(
                         fontSize: 14,
                         color: kBlackColor,
@@ -73,13 +216,14 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       fillColor: kGreyColor,
-                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(30.0),
                         ),
                         borderSide:
-                            BorderSide.none,
+                        BorderSide.none,
                       ),
                       hintText: 'Enter your phone number',
                       filled: true,
@@ -101,80 +245,90 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 16),
             child: RoundedGradientColorButton(
-              onTap: (){
-                otpTextController = TextEditingController(text: '');
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(20.0)), //this right here
-                        child: Container(
-                          height: 200,
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(margin: EdgeInsets.only(left: 16),child: Text('Confirm verification code', style: TextStyle(fontSize: 14, color: kBlackColor))),
-                                SizedBox(height: 10),
-                                _buildPinCodeView(
-                                    otpTextController, focusNode, TextInputAction.done),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    FlatButton(
-                                      child: Text('Re-send', style: TextStyle(color: kPurpleColor, fontSize: 15)),
-                                      onPressed: (){
-
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context) => BecomeDonor()
-                                        ));
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        margin: EdgeInsets.symmetric(horizontal: 16),
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            color: kPurpleColor,
-                                            gradient: LinearGradient(colors: [
-                                              const Color(0xFFFF2156),
-                                              const Color(0xFFFF4D4D),
-                                            ]),
-                                            borderRadius: BorderRadius.circular(30)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Text(
-                                            'OK',
-                                            style: TextStyle(
-                                                color: kWhiteColor,
-                                                fontSize: 14
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+              onTap: () {
+//                otpTextController = TextEditingController(text: '');
+//                showDialog(
+//                    barrierDismissible: false,
+//                    context: context,
+//                    builder: (BuildContext context) {
+//                      return Dialog(
+//                        shape: RoundedRectangleBorder(
+//                            borderRadius:
+//                            BorderRadius.circular(20.0)), //this right here
+//                        child: Container(
+//                          height: 200,
+//                          child: Padding(
+//                            padding: const EdgeInsets.all(12.0),
+//                            child: Column(
+//                              mainAxisAlignment: MainAxisAlignment.center,
+//                              crossAxisAlignment: CrossAxisAlignment.start,
+//                              children: [
+//                                Container(margin: EdgeInsets.only(left: 16),
+//                                    child: Text('Confirm verification code',
+//                                        style: TextStyle(
+//                                            fontSize: 14, color: kBlackColor))),
+//                                SizedBox(height: 10),
+//                                _buildPinCodeView(
+//                                    otpTextController, focusNode,
+//                                    TextInputAction.done),
+//                                SizedBox(
+//                                  height: 20,
+//                                ),
+//                                Row(
+//                                  mainAxisAlignment: MainAxisAlignment
+//                                      .spaceBetween,
+//                                  children: <Widget>[
+//                                    FlatButton(
+//                                      child: Text('Re-send', style: TextStyle(
+//                                          color: kPurpleColor, fontSize: 15)),
+//                                      onPressed: () {
+//
+//                                      },
+//                                    ),
+//                                    SizedBox(
+//                                      width: 20,
+//                                    ),
+//                                    InkWell(
+//                                      onTap: () {
+//                                        Navigator.push(
+//                                            context, MaterialPageRoute(
+//                                            builder: (context) => BecomeDonor()
+//                                        ));
+//                                      },
+//                                      child: Container(
+//                                        alignment: Alignment.center,
+//                                        margin: EdgeInsets.symmetric(
+//                                            horizontal: 16),
+//                                        width: 100,
+//                                        decoration: BoxDecoration(
+//                                            color: kPurpleColor,
+//                                            gradient: LinearGradient(colors: [
+//                                              const Color(0xFFFF2156),
+//                                              const Color(0xFFFF4D4D),
+//                                            ]),
+//                                            borderRadius: BorderRadius.circular(
+//                                                30)),
+//                                        child: Padding(
+//                                          padding: const EdgeInsets.all(12.0),
+//                                          child: Text(
+//                                            'OK',
+//                                            style: TextStyle(
+//                                                color: kWhiteColor,
+//                                                fontSize: 14
+//                                            ),
+//                                          ),
+//                                        ),
+//                                      ),
+//                                    ),
+//                                  ],
+//                                )
+//                              ],
+//                            ),
+//                          ),
+//                        ),
+//                      );
+//                    });
+                _submitPhoneNumber();
               },
               text: 'GET OTP',
             ),
@@ -210,8 +364,8 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
         backgroundColor: Colors.transparent,
         enableActiveFill: true,
         textStyle: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold
+            fontSize: 14,
+            fontWeight: FontWeight.bold
         ),
         controller: textEditingController,
         autoDismissKeyboard: false,
