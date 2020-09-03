@@ -49,6 +49,8 @@ class _HomeState extends State<Home> {
         cards.add(Column(
           children: <Widget>[
             ActivityCard(
+              gender: element.user.gender,
+              userImage: element.user.image,
               userName: element.user.name,
               descriptions: element.activity.description,
               image: element.activity.image,
@@ -82,6 +84,7 @@ class _HomeState extends State<Home> {
       notificationsList.clear();
       _notificationModel.requests.forEach((element) {
         notificationsList.add(NotificationCard(
+            gender: element.user.gender,
             message: element.request.message,
             name: element.user.name,
             time: element.request.time,
@@ -260,8 +263,8 @@ class _HomeState extends State<Home> {
                       color: kWhiteColor,
                     ),
                   ),
-                  onPressed: () {
-                    getAllNotifications();
+                  onPressed: () async{
+                    await getAllNotifications();
                     showModalBottomSheet(
                         context: context,
                         builder: (BuildContext bc) {
@@ -449,105 +452,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-}
-
-class NotificationCard extends StatelessWidget {
-  const NotificationCard({
-    @required this.message,
-    @required this.name,
-    @required this.time,
-    @required this.image,
-    @required this.ignoreFunction,
-    @required this.responseFunction,
-  });
-
-  final String image, time, message, name;
-  final Function ignoreFunction, responseFunction;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-        color: kWhiteColor,
-        margin: EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage:
-                            AssetImage('assets/images/user-img.jpg'),
-                      ),
-                      SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            '$name',
-                            style: TextStyle(fontSize: 14, color: kBlackColor),
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.access_time,
-                                  size: 18, color: kBorderGreyColor),
-                              SizedBox(width: 10),
-                              Text(
-                                '${time.split(' ')[1]}    ${time.split(' ')[0]}',
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: kBlackColor,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            '$message',
-                            style: TextStyle(fontSize: 10, color: kBlackColor),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  ButtonBar(
-                    buttonPadding: EdgeInsets.all(0),
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text('Ignore'),
-                        onPressed: ignoreFunction,
-                        textColor: kBorderGreyColor,
-                        padding: EdgeInsets.all(8),
-                      ),
-                      SizedBox(width: 10),
-                      FlatButton(
-                        child: Text('Response'),
-                        onPressed: responseFunction,
-                        textColor: kDarkPurpleColor,
-                        padding: EdgeInsets.all(8),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      SizedBox(height: 5),
-    ]);
   }
 }

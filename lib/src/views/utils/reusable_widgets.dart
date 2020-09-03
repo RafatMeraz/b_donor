@@ -7,10 +7,10 @@ import 'contants.dart';
 class RoundedRaisedButton extends StatelessWidget {
   RoundedRaisedButton(
       {@required this.text,
-        @required this.textColor,
-        @required this.imageLink,
-        @required this.onTap,
-        @required this.backgroundColor});
+      @required this.textColor,
+      @required this.imageLink,
+      @required this.onTap,
+      @required this.backgroundColor});
 
   final Function onTap;
   final String text;
@@ -29,15 +29,14 @@ class RoundedRaisedButton extends StatelessWidget {
           color: backgroundColor,
           onPressed: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Text(
-              text,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: textColor,
-                  fontWeight: FontWeight.bold),
-            )
-          ),
+              padding: const EdgeInsets.all(18.0),
+              child: Text(
+                text,
+                style: TextStyle(
+                    fontSize: 12,
+                    color: textColor,
+                    fontWeight: FontWeight.bold),
+              )),
         ),
       ),
     );
@@ -47,10 +46,10 @@ class RoundedRaisedButton extends StatelessWidget {
 class RoundedBorderedRaisedButton extends StatelessWidget {
   RoundedBorderedRaisedButton(
       {@required this.text,
-        @required this.textColor,
-        @required this.imageLink,
-        @required this.onTap,
-        @required this.backgroundColor});
+      @required this.textColor,
+      @required this.imageLink,
+      @required this.onTap,
+      @required this.backgroundColor});
 
   final Function onTap;
   final String text;
@@ -66,31 +65,32 @@ class RoundedBorderedRaisedButton extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
-            side: BorderSide(color: kBorderGreyColor, width: 1)
-        ),
+            side: BorderSide(color: kBorderGreyColor, width: 1)),
         color: backgroundColor,
         onPressed: onTap,
-        child: imageLink == null ? Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              text,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: textColor,
-                  fontWeight: FontWeight.bold),
-            )
-        ) :  Row(
-          children: <Widget>[
-            Image.asset(imageLink, fit: BoxFit.scaleDown, width: 22, height: 22),
-            Text(
-              text,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: textColor,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
+        child: imageLink == null
+            ? Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: textColor,
+                      fontWeight: FontWeight.bold),
+                ))
+            : Row(
+                children: <Widget>[
+                  Image.asset(imageLink,
+                      fit: BoxFit.scaleDown, width: 22, height: 22),
+                  Text(
+                    text,
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: textColor,
+                        fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
       ),
     );
   }
@@ -99,10 +99,10 @@ class RoundedBorderedRaisedButton extends StatelessWidget {
 class RoundedBorderedRaisedButtonSmall extends StatelessWidget {
   RoundedBorderedRaisedButtonSmall(
       {@required this.text,
-        @required this.textColor,
-        @required this.imageLink,
-        @required this.onTap,
-        @required this.backgroundColor});
+      @required this.textColor,
+      @required this.imageLink,
+      @required this.onTap,
+      @required this.backgroundColor});
 
   final Function onTap;
   final String text;
@@ -118,31 +118,32 @@ class RoundedBorderedRaisedButtonSmall extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
-            side: BorderSide(color: kBorderGreyColor, width: 1)
-        ),
+            side: BorderSide(color: kBorderGreyColor, width: 1)),
         color: backgroundColor,
         onPressed: onTap,
-        child: imageLink == null ? Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              text,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: textColor,
-                  fontWeight: FontWeight.bold),
-            )
-        ) :  Row(
-          children: <Widget>[
-            Image.asset(imageLink, fit: BoxFit.scaleDown, width: 22, height: 22),
-            Text(
-              text,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: textColor,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
+        child: imageLink == null
+            ? Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: textColor,
+                      fontWeight: FontWeight.bold),
+                ))
+            : Row(
+                children: <Widget>[
+                  Image.asset(imageLink,
+                      fit: BoxFit.scaleDown, width: 22, height: 22),
+                  Text(
+                    text,
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: textColor,
+                        fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
       ),
     );
   }
@@ -183,10 +184,15 @@ class RoundedGradientColorButton extends StatelessWidget {
 }
 
 class RoundedTextField extends StatelessWidget {
-  RoundedTextField({@required this.hint, @required this.controller, @required this.textInputType});
+  RoundedTextField(
+      {@required this.hint,
+      @required this.controller,
+      @required this.textInputType});
+
   final String hint;
   final TextEditingController controller;
   final TextInputType textInputType;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -204,8 +210,7 @@ class RoundedTextField extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(30.0),
           ),
-          borderSide:
-          BorderSide.none,
+          borderSide: BorderSide.none,
         ),
         hintText: '$hint',
         filled: true,
@@ -213,8 +218,7 @@ class RoundedTextField extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(30.0),
           ),
-          borderSide:
-          BorderSide.none,
+          borderSide: BorderSide.none,
         ),
       ),
     );
@@ -222,13 +226,18 @@ class RoundedTextField extends StatelessWidget {
 }
 
 showErrorToast(String message) {
-  BotToast.showText(text: message, borderRadius: BorderRadius.circular(30), contentColor: kDarkPurpleColor, textStyle: TextStyle(color: kWhiteColor));
+  BotToast.showText(
+      text: message,
+      borderRadius: BorderRadius.circular(30),
+      contentColor: kDarkPurpleColor,
+      textStyle: TextStyle(color: kWhiteColor));
 }
-
 
 class ActivityCard extends StatelessWidget {
   const ActivityCard({
     @required this.userName,
+    @required this.gender,
+    @required this.userImage,
     @required this.location,
     @required this.image,
     @required this.descriptions,
@@ -236,7 +245,7 @@ class ActivityCard extends StatelessWidget {
     @required this.reacts,
   });
 
-  final String userName, location, image, descriptions, time;
+  final String userName, gender, userImage, location, image, descriptions, time;
   final int reacts;
 
   @override
@@ -252,8 +261,9 @@ class ActivityCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 25,
                   backgroundColor: kPurpleColor,
-                  backgroundImage:
-                  image == null ? AssetImage('assets/images/user-img.jpg') : AssetImage('assets/images/user-img.jpg'),
+                  backgroundImage: userImage == null
+                      ? gender == 'Male' ? AssetImage('assets/images/user-boy.png')
+                      : AssetImage('assets/images/user-img.jpg') : NetworkImage(IMG_BASE_URL+userImage),
                 ),
                 SizedBox(width: 10),
                 Column(
@@ -262,10 +272,12 @@ class ActivityCard extends StatelessWidget {
                     InkWell(
                       child: Text('$userName',
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold)),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
+                              fontSize: 14, fontWeight: FontWeight.bold)),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UserProfile()));
                       },
                     ),
                     SizedBox(height: 5),
@@ -301,16 +313,24 @@ class ActivityCard extends StatelessWidget {
               ],
             ),
           ),
-          Image.asset(
-              image == null ? 'assets/images/donate-blood.png' : 'assets/images/donate-blood.png',
-              width: MediaQuery.of(context).size.width,
-              height: 290,
-              fit: BoxFit.cover),
+          image == null
+              ? Container()
+              : Image.network(image,
+                  width: MediaQuery.of(context).size.width,
+                  height: 290,
+                  fit: BoxFit.cover),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+
+                Text(
+                  '$descriptions',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: kTextGreyColor, fontSize: 12),
+                ),
+                SizedBox(height: 10),
                 Row(
                   children: <Widget>[
                     Container(
@@ -320,8 +340,7 @@ class ActivityCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          border:
-                          Border.all(width: 1, color: kGreyColor)),
+                          border: Border.all(width: 1, color: kGreyColor)),
                     ),
                     SizedBox(width: 10),
                     Text(
@@ -339,22 +358,117 @@ class ActivityCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          border:
-                          Border.all(width: 1, color: kGreyColor)),
+                          border: Border.all(width: 1, color: kGreyColor)),
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
-                Text(
-                  '$descriptions',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(color: kTextGreyColor, fontSize: 12),
-                )
               ],
             ),
           )
         ],
       ),
     );
+  }
+}
+
+class NotificationCard extends StatelessWidget {
+  const NotificationCard({
+    @required this.message,
+    @required this.name,
+    @required this.time,
+    @required this.image,
+    @required this.ignoreFunction,
+    @required this.gender,
+    @required this.responseFunction,
+  });
+
+  final String image, time, message, name, gender;
+  final Function ignoreFunction, responseFunction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Container(
+        color: kWhiteColor,
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      CircleAvatar(
+                          radius: 30,
+                          backgroundImage: image == null ? gender == 'Male' ?
+                          AssetImage('assets/images/user-boy.png') : AssetImage('assets/images/user-girl.png') :
+                          NetworkImage(IMG_BASE_URL+image)
+                      ),
+                      SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            '$name',
+                            style: TextStyle(fontSize: 14, color: kBlackColor),
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.access_time,
+                                  size: 18, color: kBorderGreyColor),
+                              SizedBox(width: 10),
+                              Text(
+                                '${time.split(' ')[1]}    ${time.split(' ')[0]}',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: kBlackColor,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            '$message',
+                            style: TextStyle(fontSize: 10, color: kBlackColor),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  ButtonBar(
+                    buttonPadding: EdgeInsets.all(0),
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('Ignore'),
+                        onPressed: ignoreFunction,
+                        textColor: kBorderGreyColor,
+                        padding: EdgeInsets.all(8),
+                      ),
+                      SizedBox(width: 10),
+                      FlatButton(
+                        child: Text('Response'),
+                        onPressed: responseFunction,
+                        textColor: kDarkPurpleColor,
+                        padding: EdgeInsets.all(8),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: 5),
+    ]);
   }
 }
