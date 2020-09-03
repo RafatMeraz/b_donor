@@ -330,164 +330,169 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: ModalProgressHUD(
-        inAsyncCall: inProgress,
-        color: Colors.black87,
-        progressIndicator: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: kPurpleColor,
+      body: RefreshIndicator(
+        onRefresh: () async{
+          getAllHomeData();
+        },
+        child: ModalProgressHUD(
+          inAsyncCall: inProgress,
+          color: Colors.black87,
+          progressIndicator: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: kPurpleColor,
+            ),
+            padding: EdgeInsets.all(20),
+            child: CircularProgressIndicator(
+              backgroundColor: kWhiteColor,
+              valueColor: AlwaysStoppedAnimation<Color>(kBlackColor),
+            ),
           ),
-          padding: EdgeInsets.all(20),
-          child: CircularProgressIndicator(
-            backgroundColor: kWhiteColor,
-            valueColor: AlwaysStoppedAnimation<Color>(kBlackColor),
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 240,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  const Color(0xFFFF215D),
-                  const Color(0xFFFF4D4D),
-                ])),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                          color: Colors.white24,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 240,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                    const Color(0xFFFF215D),
+                    const Color(0xFFFF4D4D),
+                  ])),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                      _homeModel == null
+                                          ? '00'
+                                          : _homeModel.totalDonor.toString(),
+                                      style: TextStyle(
+                                          fontSize: 22, color: kWhiteColor)),
+                                  Text('Donors',
+                                      style: TextStyle(
+                                          fontSize: 14, color: kWhiteColor)),
+                                ],
+                              ),
+                              RoundedRaisedButton(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ExploreAllDonors()));
+                                },
+                                backgroundColor: kWhiteColor,
+                                text: 'FIND DONOR',
+                                textColor: kPurpleColor,
+                                imageLink: null,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                      _homeModel == null
+                                          ? '00'
+                                          : _homeModel.totalRequest.toString(),
+                                      style: TextStyle(
+                                          fontSize: 22, color: kWhiteColor)),
+                                  Text('Request',
+                                      style: TextStyle(
+                                          fontSize: 14, color: kWhiteColor)),
+                                ],
+                              ),
+                              SizedBox(width: 30),
+                              RoundedRaisedButton(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AllRequests()));
+                                },
+                                backgroundColor: kWhiteColor,
+                                text: 'SEE REQUEST',
+                                textColor: kPurpleColor,
+                                imageLink: null,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 5),
+                Container(
+                  color: kWhiteColor,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('EXPLORE LATEST FEED',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: kBlackColor)),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PostActivity(getHomeData: getAllHomeData)));
+                        },
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                    _homeModel == null
-                                        ? '00'
-                                        : _homeModel.totalDonor.toString(),
-                                    style: TextStyle(
-                                        fontSize: 22, color: kWhiteColor)),
-                                Text('Donors',
-                                    style: TextStyle(
-                                        fontSize: 14, color: kWhiteColor)),
-                              ],
-                            ),
-                            RoundedRaisedButton(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ExploreAllDonors()));
-                              },
-                              backgroundColor: kWhiteColor,
-                              text: 'FIND DONOR',
-                              textColor: kPurpleColor,
-                              imageLink: null,
-                            )
+                            Icon(Icons.add_circle_outline, color: kPurpleColor),
+                            Text('Post Update',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: kPurpleColor)),
                           ],
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                          color: Colors.white24,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                    _homeModel == null
-                                        ? '00'
-                                        : _homeModel.totalRequest.toString(),
-                                    style: TextStyle(
-                                        fontSize: 22, color: kWhiteColor)),
-                                Text('Request',
-                                    style: TextStyle(
-                                        fontSize: 14, color: kWhiteColor)),
-                              ],
-                            ),
-                            SizedBox(width: 30),
-                            RoundedRaisedButton(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AllRequests()));
-                              },
-                              backgroundColor: kWhiteColor,
-                              text: 'SEE REQUEST',
-                              textColor: kPurpleColor,
-                              imageLink: null,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 5),
-              Container(
-                color: kWhiteColor,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('EXPLORE LATEST FEED',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: kBlackColor)),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PostActivity(getHomeData: getAllHomeData)));
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.add_circle_outline, color: kPurpleColor),
-                          Text('Post Update',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: kPurpleColor)),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(height: 5),
-              _homeModel == null
-                  ? Container()
-                  : _homeModel.recentActivities.length == 0
-                      ? Container()
-                      : Column(
-                          children: cards,
-                        ),
-            ],
+                SizedBox(height: 5),
+                _homeModel == null
+                    ? Container()
+                    : _homeModel.recentActivities.length == 0
+                        ? Container()
+                        : Column(
+                            children: cards,
+                          ),
+              ],
+            ),
           ),
         ),
       ),

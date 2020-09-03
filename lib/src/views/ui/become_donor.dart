@@ -10,7 +10,6 @@ import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 import 'package:google_maps_webservice/places.dart';
 
-
 class BecomeDonor extends StatefulWidget {
   @override
   _BecomeDonorState createState() => _BecomeDonorState();
@@ -28,8 +27,12 @@ class _BecomeDonorState extends State<BecomeDonor> {
   @override
   void initState() {
     super.initState();
+    if (RegisterUserData.email != null){
+      _emailController = TextEditingController(text: RegisterUserData.email);
+    } else {
+      _emailController = TextEditingController();
+    }
     _nameController = TextEditingController();
-    _emailController = TextEditingController();
     _addressController = TextEditingController();
     _zipController = TextEditingController();
   }
