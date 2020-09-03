@@ -5,7 +5,7 @@ import 'package:organize_flutter_project/src/business_logic/services/hive_servic
 import 'package:organize_flutter_project/src/business_logic/utils/api_response_object.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 
-const BASE_URL = 'http://192.168.0.101:6000/';
+const BASE_URL = 'http://192.168.43.136:6000/';
 
 class UserAuthAPIServices {
   final _client = http.Client();
