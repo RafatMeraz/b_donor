@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/become_donor.dart';
+import 'package:organize_flutter_project/src/views/ui/home.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -159,17 +161,33 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
     FirebaseAuth.instance
         .signInWithCredential(_phoneAuthCredential)
         .then((value) {
-      setState(() {
-        inProgress = false;
-      });
-      RegisterUserData.phone = '+8801'+_phoneNumberController.text;
-      Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
+          checkPhoneExists();
     }).catchError((onError){
       setState(() {
         inProgress = false;
       });
       print(onError.toString());
     });
+  }
+
+  checkPhoneExists() async{
+    var _response = await repository.checkEmailExists(RegisterUserData.email, EmailExistCheck.ExistsCheck);
+    if (_response.id == ResponseCode.SUCCESSFUL) {
+      setState(() {
+        inProgress = false;
+      });
+      if (_response.object == 'not exists'){
+        RegisterUserData.phone = '+8801'+_phoneNumberController.text;
+        Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
+      } else {
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()), (route) => false);
+      }
+    } else {
+      setState(() {
+        inProgress = false;
+      });
+      showErrorToast(_response.object);
+    }
   }
 
   @override

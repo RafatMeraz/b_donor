@@ -8,7 +8,6 @@ import 'package:organize_flutter_project/src/views/ui/home.dart';
 import 'package:organize_flutter_project/src/views/ui/verify_number.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
-import 'package:http/http.dart' as http;
 
 class LoginRegister extends StatefulWidget {
   @override
@@ -58,8 +57,11 @@ class _LoginRegisterState extends State<LoginRegister> {
     setState(() {
       inProgress = true;
     });
-    var _response = await repository.checkEmailExists(RegisterUserData.email);
+    var _response = await repository.checkEmailExists(RegisterUserData.email, EmailExistCheck.LoginCheck);
     if (_response.id == ResponseCode.SUCCESSFUL) {
+      setState(() {
+        inProgress = false;
+      });
       if (_response.object == 'not exists'){
         Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyMobileNumber()));
       } else {
