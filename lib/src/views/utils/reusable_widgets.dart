@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:organize_flutter_project/src/business_logic/models/donor_model.dart';
 import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
 
 import 'contants.dart';
@@ -503,5 +504,115 @@ class NotificationCard extends StatelessWidget {
       ),
       SizedBox(height: 5),
     ]);
+  }
+}
+
+class DonorCard extends StatelessWidget {
+  const DonorCard({
+    @required this.donor
+  });
+
+  final Donor donor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        SizedBox(height: 5),
+        Container(
+          color: kWhiteColor,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: kGreyColor,
+                      radius: 50,
+                      backgroundImage: donor.image == null ? donor.gender == 'Male' ?  AssetImage(
+                          'assets/images/user-boy.png') : AssetImage(
+                          'assets/images/user-girl.png') : NetworkImage(IMG_BASE_URL+ donor.image),
+                    ),
+                    Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '${donor.name}',
+                          style: TextStyle(
+                              fontSize: 14, color: kBlackColor),
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          children: <Widget>[
+                            Icon(Icons.location_on,
+                                size: 18,
+                                color: kBorderGreyColor),
+                            SizedBox(width: 10),
+                            Text(
+                              '${donor.address}  ${donor.division}  ${donor.zipCode}',
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: kBlackColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        RoundedBorderedRaisedButton(
+                          backgroundColor: kWhiteColor,
+                          onTap: () {},
+                          imageLink: null,
+                          textColor: kPurpleColor,
+                          text: 'Ask For Help',
+                        )
+                      ],
+                    ),
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          '${donor.bloodGroup}',
+                          style: TextStyle(
+                              color: kPurpleColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                              width: 1, color: kBorderGreyColor)),
+                    ),
+                  ],
+                ),
+              ),
+              donor.lastDonation == null ? Container() : Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(
+                    vertical: 8, horizontal: 20),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      const Color(0xFFFF3643),
+                      const Color(0xFFFF4383),
+                    ])),
+                child: Text(
+                  'Last date of donation ${donor.lastDonation}',
+                  style:
+                  TextStyle(fontSize: 12, color: kWhiteColor),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
