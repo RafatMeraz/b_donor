@@ -318,7 +318,7 @@ class ActivityCard extends StatelessWidget {
           ),
           image == null
               ? Container()
-              : Image.network(image,
+              : Image.network(IMG_BASE_URL+image,
               width: MediaQuery
                   .of(context)
                   .size

@@ -1,15 +1,83 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
 class PostActivity extends StatefulWidget {
+  PostActivity({@required this.getHomeData});
+  final Function getHomeData;
   @override
   _PostActivityState createState() => _PostActivityState();
 }
 
 class _PostActivityState extends State<PostActivity> {
+  TextEditingController _addressController, _descriptionController;
+  File _imageFile;
+  final picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    _addressController = TextEditingController();
+    _descriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future getImage() async {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+            title: Text('Upload Image'),
+            content: Container(
+              height: 130,
+              margin: EdgeInsets.all(8),
+              child: Column(
+                children: <Widget>[
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.camera),
+                      title: Text('Camera'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        final pickedFile =
+                        await picker.getImage(source: ImageSource.camera);
+                        if (pickedFile != null) {
+                          setState(() {
+                            _imageFile = File(pickedFile.path);
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.photo),
+                      title: Text('Gallery'),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        final pickedFile =
+                        await picker.getImage(source: ImageSource.gallery);
+                        if (pickedFile != null) {
+                          setState(() {
+                            _imageFile = File(pickedFile.path);
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +116,24 @@ class _PostActivityState extends State<PostActivity> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('No image selected'),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(30), bottomRight: Radius.circular(30),),
-                          gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFFFF2156),
-                            const Color(0xFFFF4D4D),
-                          ]
-                        )
+                    Text(_imageFile == null ? 'No image selected' : _imageFile.path),
+                    InkWell(
+                      onTap: (){
+                        getImage();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(topRight: Radius.circular(30), bottomRight: Radius.circular(30),),
+                            gradient: LinearGradient(
+                            colors: [
+                              const Color(0xFFFF2156),
+                              const Color(0xFFFF4D4D),
+                            ]
+                          )
+                        ),
+                        child: Text('SELECT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kWhiteColor)),
                       ),
-                      child: Text('SELECT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kWhiteColor)),
                     )
                   ],
                 ),

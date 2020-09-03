@@ -47,7 +47,7 @@ class RecentActivities {
 class Activity {
   int id;
   String address;
-  Null image;
+  String image;
   String time;
   int userId;
   String description;

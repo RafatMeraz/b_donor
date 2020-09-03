@@ -463,7 +463,7 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PostActivity()));
+                                builder: (context) => PostActivity(getHomeData: getAllHomeData)));
                       },
                       child: Row(
                         children: <Widget>[
