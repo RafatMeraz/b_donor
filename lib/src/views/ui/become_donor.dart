@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:group_button/group_button.dart';
+import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/home.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
+import 'package:google_maps_webservice/places.dart';
+
 
 class BecomeDonor extends StatefulWidget {
   @override
@@ -11,9 +16,30 @@ class BecomeDonor extends StatefulWidget {
 
 class _BecomeDonorState extends State<BecomeDonor> {
   bool isGenderMale = true, isVisible = false;
-  String _donorBloodGroup;
-
+  String _donorBloodGroup = 'A+', _division = 'Dhaka';
   final bloodGroups = ["A+", "A-", "B-", "B+", "O+", "O-", "AB-", "AB+"];
+  TextEditingController _nameController, _emailController, _addressController, _zipController;
+  final homeScaffoldKey = GlobalKey<ScaffoldState>();
+  final searchScaffoldKey = GlobalKey<ScaffoldState>();
+  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: 'AIzaSyCI670R0dILrIKJNaL7qu2di_XSYw0hI-4');
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _emailController = TextEditingController();
+    _addressController = TextEditingController();
+    _zipController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _addressController.dispose();
+    _zipController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +66,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
                 SizedBox(height: 10),
                 RoundedTextField(
                   hint: 'Name',
-                  controller: null,
+                  controller: _nameController,
                   textInputType: TextInputType.text,
                 ),
                 SizedBox(
@@ -48,8 +74,87 @@ class _BecomeDonorState extends State<BecomeDonor> {
                 ),
                 RoundedTextField(
                   hint: 'E-Mail',
-                  controller: null,
+                  controller: _emailController,
                   textInputType: TextInputType.emailAddress,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextField(
+                  controller: _addressController,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: kBlackColor,
+                      letterSpacing: 0.3,
+                      fontWeight: FontWeight.w400),
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    fillColor: kGreyColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                      borderSide:
+                      BorderSide.none,
+                    ),
+                    hintText: 'Address',
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                      borderSide:
+                      BorderSide.none,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: kGreyColor,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal : 16.0),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: _division,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            underline: SizedBox(),
+                            style: TextStyle(color: kBlackColor, fontSize: 14, fontFamily: 'Montserrat'),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                _division = newValue;
+                              });
+                            },
+                            items: <String>['Dhaka', 'Barisal', 'Chittagong', 'Khulna', 'Mymensingh', 'Rajshahi', 'Rangpur', 'Sylhet']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: RoundedTextField(
+                        hint: 'ZIP',
+                        textInputType: TextInputType.number,
+                        controller: _zipController,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20),
                 Text('Gender',
@@ -153,14 +258,67 @@ class _BecomeDonorState extends State<BecomeDonor> {
                 RoundedGradientColorButton(
                   text: 'DONE',
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Home()));
+                    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_emailController.text.trim());
+                    if (_nameController.text.trim().isNotEmpty){
+                      if (emailValid){
+                        if (_addressController.text.trim().isNotEmpty){
+                          if (_zipController.text.trim().isNotEmpty){
+                            RegisterUserData.name = _nameController.text.trim();
+                            RegisterUserData.email = _emailController.text.trim();
+                            RegisterUserData.address = _addressController.text.trim();
+                            RegisterUserData.zipCode = _zipController.text.trim();
+                            RegisterUserData.division = _division;
+                            RegisterUserData.gender = isGenderMale ? 'Male' : 'Female';
+                            RegisterUserData.bloodGroup = _donorBloodGroup;
+                            RegisterUserData.contactVisible = isVisible ? 1.toString() : 0.toString();
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => Home()));
+                          } else {
+                            showErrorToast('Enter zip code!');
+                          }
+                        } else {
+                          showErrorToast('Enter your address!');
+                        }
+                      } else {
+                        showErrorToast('Enter a valid email!');
+                      }
+                    } else {
+                      showErrorToast('Enter your full name!');
+                    }
                   },
                 )
               ],
             ),
           ),
         ));
+  }
+
+  Future<void> _handlePressButton() async {
+
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    Prediction p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: 'AIzaSyCI670R0dILrIKJNaL7qu2di_XSYw0hI-4',
+      onError: (value) => print(value.errorMessage),
+      mode: Mode.overlay,
+      language: "en",
+      components: [Component(Component.country, "bd")],
+    );
+
+    displayPrediction(p, homeScaffoldKey.currentState);
+  }
+  Future<Null> displayPrediction(Prediction p, ScaffoldState scaffold) async {
+    if (p != null) {
+      // get detail (lat/lng)
+      PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
+      final lat = detail.result.geometry.location.lat;
+      final lng = detail.result.geometry.location.lng;
+
+      scaffold.showSnackBar(
+        SnackBar(content: Text("${p.description} - $lat/$lng")),
+      );
+    }
   }
 }
 

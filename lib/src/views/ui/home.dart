@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
 import 'package:organize_flutter_project/src/views/ui/all_requests.dart';
 import 'package:organize_flutter_project/src/views/ui/diet_chart.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
+import 'package:organize_flutter_project/src/views/ui/login_register.dart';
 import 'package:organize_flutter_project/src/views/ui/post_activity.dart';
 import 'package:organize_flutter_project/src/views/ui/profile.dart';
 import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
@@ -103,8 +105,11 @@ class _HomeState extends State<Home> {
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app, color: kPurpleColor, size: 20),
-              title: Text('Exit'),
-              onTap: () {},
+              title: Text('Log out'),
+              onTap: () {
+                HiveServices.logOut();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginRegister()));
+              },
             ),
           ],
         ),

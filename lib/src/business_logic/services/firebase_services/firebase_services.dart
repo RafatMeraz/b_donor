@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -30,10 +31,10 @@ Future<bool> signInWithGoogle() async {
   assert(await authResult.user.getIdToken() != null);
 
   assert(authResult.user.uid == _auth.currentUser.uid);
-//  RegistrationData.socialId = currentUser.uid;
+  RegisterUserData.socialId = authResult.user.uid;
 //  print(RegistrationData.socialId);
-//  RegistrationData.socialLogin = '1';
-//  RegistrationData.email = currentUser.email;
+  RegisterUserData.socialLogin = '1';
+  RegisterUserData.email = authResult.user.email;
 //  UserData.socialLogin = true;
   return true;
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/become_donor.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
@@ -161,6 +162,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
       setState(() {
         inProgress = false;
       });
+      RegisterUserData.phone = '+8801'+_phoneNumberController.text;
       Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
     }).catchError((onError){
       setState(() {

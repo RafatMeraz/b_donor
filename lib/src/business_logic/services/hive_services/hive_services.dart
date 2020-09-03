@@ -26,8 +26,9 @@ class HiveServices {
   }
   // clear all data of box
   static logOut(){
-    _box.delete('user-id');
-    _box.delete('user-email');
-    _box.delete('user-phone');
+    _box.delete('id');
+    _box.delete('email');
+    _box.delete('phone');
+    _box.delete('name');
   }
 } 
