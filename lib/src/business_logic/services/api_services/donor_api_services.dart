@@ -28,4 +28,32 @@ class DonorAPIServices {
     }
   }
 
+  // ask for help
+  Future<ResponseObject> askForHelp(int requestTo, String message) async {
+    try {
+      var _response = await _client.post(BASE_URL + 'createNewIndivisualRequest', body: {
+        'user_id' : UserData.userId.toString(),
+        'request_to' : requestTo.toString(),
+        'message' : message
+      });
+      print(jsonDecode(_response.body));
+      if (_response.statusCode == 200) {
+        var decodedResponse = jsonDecode(_response.body);
+        print(decodedResponse);
+        if (decodedResponse['error'] == false){
+          return ResponseObject(
+              id: ResponseCode.SUCCESSFUL, object: DonorModel.fromJson(decodedResponse));
+        } else {
+          return ResponseObject(id: ResponseCode.FAILED, object: 'Request failed! Try again.');
+        }
+      } else {
+        return ResponseObject(
+            id: ResponseCode.FAILED,
+            object: 'Status code for request ${_response.statusCode}');
+      }
+    } catch (e) {
+      return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
+    }
+  }
+
 }

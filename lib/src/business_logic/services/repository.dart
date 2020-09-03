@@ -41,6 +41,7 @@ class _Repository {
           address: address, image: image, description: description);
 
   Future<ResponseObject> getAllDonor() async => _donorAPIServices.getAllDonor();
+  Future<ResponseObject> askForHelp(int requestTo, String message) async => _donorAPIServices.askForHelp(requestTo, message);
 }
 
 final repository = _Repository();

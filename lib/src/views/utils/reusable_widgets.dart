@@ -227,6 +227,7 @@ showErrorToast(String message) {
       text: message,
       borderRadius: BorderRadius.circular(30),
       contentColor: kDarkPurpleColor,
+      duration: Duration(seconds: 3),
       textStyle: TextStyle(color: kWhiteColor));
 }
 
@@ -235,6 +236,7 @@ showSuccessToast(String message) {
       text: message,
       borderRadius: BorderRadius.circular(30),
       contentColor: Colors.green,
+      duration: Duration(seconds: 3),
       textStyle: TextStyle(color: kWhiteColor));
 }
 
@@ -509,10 +511,12 @@ class NotificationCard extends StatelessWidget {
 
 class DonorCard extends StatelessWidget {
   const DonorCard({
-    @required this.donor
+    @required this.donor,
+    @required this.requestToDonor,
   });
 
   final Donor donor;
+  final Function requestToDonor;
 
   @override
   Widget build(BuildContext context) {
@@ -568,7 +572,9 @@ class DonorCard extends StatelessWidget {
                         ),
                         RoundedBorderedRaisedButton(
                           backgroundColor: kWhiteColor,
-                          onTap: () {},
+                          onTap: () {
+                            requestToDonor(donor.id);
+                          },
                           imageLink: null,
                           textColor: kPurpleColor,
                           text: 'Ask For Help',
