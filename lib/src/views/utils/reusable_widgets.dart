@@ -5,12 +5,11 @@ import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
 import 'contants.dart';
 
 class RoundedRaisedButton extends StatelessWidget {
-  RoundedRaisedButton(
-      {@required this.text,
-      @required this.textColor,
-      @required this.imageLink,
-      @required this.onTap,
-      @required this.backgroundColor});
+  RoundedRaisedButton({@required this.text,
+    @required this.textColor,
+    @required this.imageLink,
+    @required this.onTap,
+    @required this.backgroundColor});
 
   final Function onTap;
   final String text;
@@ -44,12 +43,11 @@ class RoundedRaisedButton extends StatelessWidget {
 }
 
 class RoundedBorderedRaisedButton extends StatelessWidget {
-  RoundedBorderedRaisedButton(
-      {@required this.text,
-      @required this.textColor,
-      @required this.imageLink,
-      @required this.onTap,
-      @required this.backgroundColor});
+  RoundedBorderedRaisedButton({@required this.text,
+    @required this.textColor,
+    @required this.imageLink,
+    @required this.onTap,
+    @required this.backgroundColor});
 
   final Function onTap;
   final String text;
@@ -70,39 +68,38 @@ class RoundedBorderedRaisedButton extends StatelessWidget {
         onPressed: onTap,
         child: imageLink == null
             ? Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  text,
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: textColor,
-                      fontWeight: FontWeight.bold),
-                ))
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              text,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: textColor,
+                  fontWeight: FontWeight.bold),
+            ))
             : Row(
-                children: <Widget>[
-                  Image.asset(imageLink,
-                      fit: BoxFit.scaleDown, width: 22, height: 22),
-                  Text(
-                    text,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: textColor,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
+          children: <Widget>[
+            Image.asset(imageLink,
+                fit: BoxFit.scaleDown, width: 22, height: 22),
+            Text(
+              text,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: textColor,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
 class RoundedBorderedRaisedButtonSmall extends StatelessWidget {
-  RoundedBorderedRaisedButtonSmall(
-      {@required this.text,
-      @required this.textColor,
-      @required this.imageLink,
-      @required this.onTap,
-      @required this.backgroundColor});
+  RoundedBorderedRaisedButtonSmall({@required this.text,
+    @required this.textColor,
+    @required this.imageLink,
+    @required this.onTap,
+    @required this.backgroundColor});
 
   final Function onTap;
   final String text;
@@ -123,27 +120,27 @@ class RoundedBorderedRaisedButtonSmall extends StatelessWidget {
         onPressed: onTap,
         child: imageLink == null
             ? Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  text,
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: textColor,
-                      fontWeight: FontWeight.bold),
-                ))
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              text,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: textColor,
+                  fontWeight: FontWeight.bold),
+            ))
             : Row(
-                children: <Widget>[
-                  Image.asset(imageLink,
-                      fit: BoxFit.scaleDown, width: 22, height: 22),
-                  Text(
-                    text,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: textColor,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
+          children: <Widget>[
+            Image.asset(imageLink,
+                fit: BoxFit.scaleDown, width: 22, height: 22),
+            Text(
+              text,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: textColor,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -184,10 +181,9 @@ class RoundedGradientColorButton extends StatelessWidget {
 }
 
 class RoundedTextField extends StatelessWidget {
-  RoundedTextField(
-      {@required this.hint,
-      @required this.controller,
-      @required this.textInputType});
+  RoundedTextField({@required this.hint,
+    @required this.controller,
+    @required this.textInputType});
 
   final String hint;
   final TextEditingController controller;
@@ -262,8 +258,10 @@ class ActivityCard extends StatelessWidget {
                   radius: 25,
                   backgroundColor: kPurpleColor,
                   backgroundImage: userImage == null
-                      ? gender == 'Male' ? AssetImage('assets/images/user-boy.png')
-                      : AssetImage('assets/images/user-img.jpg') : NetworkImage(IMG_BASE_URL+userImage),
+                      ? gender == 'Male' ? AssetImage(
+                      'assets/images/user-boy.png')
+                      : AssetImage('assets/images/user-img.jpg') : NetworkImage(
+                      IMG_BASE_URL + userImage),
                 ),
                 SizedBox(width: 10),
                 Column(
@@ -316,9 +314,12 @@ class ActivityCard extends StatelessWidget {
           image == null
               ? Container()
               : Image.network(image,
-                  width: MediaQuery.of(context).size.width,
-                  height: 290,
-                  fit: BoxFit.cover),
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              height: 290,
+              fit: BoxFit.cover),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Column(
@@ -374,6 +375,7 @@ class ActivityCard extends StatelessWidget {
 class NotificationCard extends StatelessWidget {
   const NotificationCard({
     @required this.message,
+    @required this.id,
     @required this.name,
     @required this.time,
     @required this.image,
@@ -383,6 +385,7 @@ class NotificationCard extends StatelessWidget {
   });
 
   final String image, time, message, name, gender;
+  final int id;
   final Function ignoreFunction, responseFunction;
 
   @override
@@ -404,8 +407,9 @@ class NotificationCard extends StatelessWidget {
                       CircleAvatar(
                           radius: 30,
                           backgroundImage: image == null ? gender == 'Male' ?
-                          AssetImage('assets/images/user-boy.png') : AssetImage('assets/images/user-girl.png') :
-                          NetworkImage(IMG_BASE_URL+image)
+                          AssetImage('assets/images/user-boy.png') : AssetImage(
+                              'assets/images/user-girl.png') :
+                          NetworkImage(IMG_BASE_URL + image)
                       ),
                       SizedBox(width: 20),
                       Column(
@@ -422,7 +426,8 @@ class NotificationCard extends StatelessWidget {
                                   size: 18, color: kBorderGreyColor),
                               SizedBox(width: 10),
                               Text(
-                                '${time.split(' ')[1]}    ${time.split(' ')[0]}',
+                                '${time.split(' ')[1]}    ${time.split(
+                                    ' ')[0]}',
                                 style: TextStyle(
                                     fontSize: 10,
                                     color: kBlackColor,
@@ -449,14 +454,18 @@ class NotificationCard extends StatelessWidget {
                     children: <Widget>[
                       FlatButton(
                         child: Text('Ignore'),
-                        onPressed: ignoreFunction,
+                        onPressed: () {
+                          ignoreFunction(id, 2);
+                        },
                         textColor: kBorderGreyColor,
                         padding: EdgeInsets.all(8),
                       ),
                       SizedBox(width: 10),
                       FlatButton(
                         child: Text('Response'),
-                        onPressed: responseFunction,
+                        onPressed: () {
+                          responseFunction(id, 1);
+                        },
                         textColor: kDarkPurpleColor,
                         padding: EdgeInsets.all(8),
                       ),

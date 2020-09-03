@@ -84,17 +84,38 @@ class _HomeState extends State<Home> {
       notificationsList.clear();
       _notificationModel.requests.forEach((element) {
         notificationsList.add(NotificationCard(
+            id: element.request.id,
             gender: element.user.gender,
             message: element.request.message,
             name: element.user.name,
             time: element.request.time,
             image: element.user.image,
-            ignoreFunction: () {},
-            responseFunction: () {}));
+            ignoreFunction: responseToNotification,
+            responseFunction: responseToNotification));
       });
       setState(() {
         isVisible = false;
       });
+    } else {
+      setState(() {
+        isVisible = false;
+      });
+      showErrorToast(_response.object);
+    }
+  }
+
+  // get all home data from api
+  responseToNotification(int requestId, int response) async {
+    setState(() {
+      isVisible = true;
+    });
+    var _response = await repository.responsePersonalNotifications(requestId, response);
+    if (_response.id == ResponseCode.SUCCESSFUL) {
+      setState(() {
+        isVisible = false;
+      });
+      Navigator.of(context).pop();
+      getAllHomeData();
     } else {
       setState(() {
         isVisible = false;
@@ -273,7 +294,7 @@ class _HomeState extends State<Home> {
                                   visible: isVisible,
                                   child: Center(
                                       child: CircularProgressIndicator()))
-                              : Column(
+                              : _notificationModel.requests.length == 0 ? Center(child: Text('No new notifications!')) : Column(
                             children: notificationsList,
                           );
                         });

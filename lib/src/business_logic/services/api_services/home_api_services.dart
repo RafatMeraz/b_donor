@@ -50,6 +50,35 @@ class HomeAPIServices {
     }
   }
 
+  // response to request
+  Future<ResponseObject> responsePersonalNotifications(int requestId, int response) async {
+    try {
+      print(requestId);
+      print(response);
+      var _response = await _client.post(BASE_URL + 'responseToIndivisualRequest',
+          body: {'request_id': requestId.toString(), 'user_response' : response.toString()});
+      print(jsonDecode(_response.body));
+      if (_response.statusCode == 200) {
+        var decodedResponse = jsonDecode(_response.body);
+        print(decodedResponse);
+        if (decodedResponse['error'] == false){
+          return ResponseObject(
+              id: ResponseCode.SUCCESSFUL, object: 'Response done');
+        } else {
+          return ResponseObject(
+              id: ResponseCode.FAILED, object: 'Response to notification failed! Try again.');
+        }
+
+      } else {
+        return ResponseObject(
+            id: ResponseCode.FAILED,
+            object: 'Status code for request ${_response.statusCode}');
+      }
+    } catch (e) {
+      return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
+    }
+  }
+
   // change donor mode
   Future<ResponseObject> changeDonorMode(int status) async {
     try {

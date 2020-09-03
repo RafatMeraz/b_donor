@@ -13,6 +13,7 @@ class _Repository {
   Future<ResponseObject> getHomeData() async => _homeAPIServices.getHomeData();
   Future<ResponseObject> changeDonorMode(int status) async => _homeAPIServices.changeDonorMode(status);
   Future<ResponseObject> getAllNotifications() async => _homeAPIServices.getAllNotifications();
+  Future<ResponseObject> responsePersonalNotifications(int requestId, int response) async => _homeAPIServices.responsePersonalNotifications(requestId, response);
 }
 
 final repository = _Repository();
