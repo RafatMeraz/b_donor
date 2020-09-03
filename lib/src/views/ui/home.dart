@@ -1,7 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/models/home_model.dart';
+import 'package:organize_flutter_project/src/business_logic/models/notification_model.dart';
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
@@ -11,7 +13,6 @@ import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
 import 'package:organize_flutter_project/src/views/ui/login_register.dart';
 import 'package:organize_flutter_project/src/views/ui/post_activity.dart';
 import 'package:organize_flutter_project/src/views/ui/profile.dart';
-import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
@@ -21,10 +22,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool donorMode = false, inProgress = false;
+  bool donorMode = false, inProgress = false, isVisible = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeModel _homeModel;
   List<Column> cards = List();
+  List<NotificationCard> notificationsList = List();
+  NotificationModel _notificationModel;
 
   @override
   void initState() {
@@ -33,12 +36,12 @@ class _HomeState extends State<Home> {
   }
 
   // get all home data from api
-  getAllHomeData() async{
+  getAllHomeData() async {
     setState(() {
       inProgress = true;
     });
     var _response = await repository.getHomeData();
-    if (_response.id == ResponseCode.SUCCESSFUL){
+    if (_response.id == ResponseCode.SUCCESSFUL) {
       _homeModel = _response.object;
       donorMode = _homeModel.donorMode == 1;
       cards.clear();
@@ -69,48 +72,41 @@ class _HomeState extends State<Home> {
   }
 
   // get all home data from api
-  getAllNotifications() async{
+  getAllNotifications() async {
     setState(() {
-      inProgress = true;
+      isVisible = true;
     });
-    var _response = await repository.getHomeData();
-    if (_response.id == ResponseCode.SUCCESSFUL){
-      _homeModel = _response.object;
-      donorMode = _homeModel.donorMode == 1;
-      cards.clear();
-      _homeModel.recentActivities.forEach((element) {
-        cards.add(Column(
-          children: <Widget>[
-            ActivityCard(
-              userName: element.user.name,
-              descriptions: element.activity.description,
-              image: element.activity.image,
-              location: element.activity.address,
-              reacts: element.reacts,
-              time: element.activity.time,
-            ),
-            SizedBox(height: 5),
-          ],
-        ));
+    var _response = await repository.getAllNotifications();
+    if (_response.id == ResponseCode.SUCCESSFUL) {
+      _notificationModel = _response.object;
+      notificationsList.clear();
+      _notificationModel.requests.forEach((element) {
+        notificationsList.add(NotificationCard(
+            message: element.request.message,
+            name: element.user.name,
+            time: element.request.time,
+            image: element.user.image,
+            ignoreFunction: () {},
+            responseFunction: () {}));
       });
       setState(() {
-        inProgress = false;
+        isVisible = false;
       });
     } else {
       setState(() {
-        inProgress = false;
+        isVisible = false;
       });
       showErrorToast(_response.object);
     }
   }
 
   // change user mode from api
-  changeUserMode(int mode) async{
+  changeUserMode(int mode) async {
     setState(() {
       inProgress = true;
     });
     var _response = await repository.changeDonorMode(mode);
-    if (_response.id == ResponseCode.SUCCESSFUL){
+    if (_response.id == ResponseCode.SUCCESSFUL) {
       setState(() {
         donorMode = !donorMode;
         inProgress = false;
@@ -168,7 +164,7 @@ class _HomeState extends State<Home> {
                   trackColor: kSoftBlueColor,
                   value: donorMode,
                   onChanged: (val) {
-                    changeUserMode(val?1:0);
+                    changeUserMode(val ? 1 : 0);
                   },
                 ),
               ),
@@ -191,7 +187,8 @@ class _HomeState extends State<Home> {
               leading: Icon(Icons.fastfood, color: kPurpleColor, size: 20),
               title: Text('Diet Chart'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DietChart()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DietChart()));
               },
             ),
             ListTile(
@@ -209,7 +206,8 @@ class _HomeState extends State<Home> {
               title: Text('Log out'),
               onTap: () {
                 HiveServices.logOut();
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginRegister()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginRegister()));
               },
             ),
           ],
@@ -246,33 +244,36 @@ class _HomeState extends State<Home> {
                       color: Colors.white),
                 ),
                 IconButton(
-                  icon: Icon(
-                    Icons.notifications,
-                    color: kWhiteColor,
+                  icon: Badge(
+                    badgeContent: Text(
+                      _homeModel == null
+                          ? ''
+                          : _homeModel.totalNotifications.toString(),
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: kWhiteColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    badgeColor: Colors.amber,
+                    child: Icon(
+                      Icons.notifications,
+                      color: kWhiteColor,
+                    ),
                   ),
                   onPressed: () {
-
+                    getAllNotifications();
                     showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext bc){
-                          return Container(
-                            child: new Wrap(
-                              children: <Widget>[
-                                new ListTile(
-                                    leading: new Icon(Icons.music_note),
-                                    title: new Text('Music'),
-                                    onTap: () => {}
-                                ),
-                                new ListTile(
-                                  leading: new Icon(Icons.videocam),
-                                  title: new Text('Video'),
-                                  onTap: () => {},
-                                ),
-                              ],
-                            ),
+                        builder: (BuildContext bc) {
+                          return _notificationModel == null
+                              ? Visibility(
+                                  visible: isVisible,
+                                  child: Center(
+                                      child: CircularProgressIndicator()))
+                              : Column(
+                            children: notificationsList,
                           );
-                        }
-                    );
+                        });
                   },
                 )
               ],
@@ -329,7 +330,10 @@ class _HomeState extends State<Home> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Text(_homeModel == null ? '00' : _homeModel.totalDonor.toString(),
+                                Text(
+                                    _homeModel == null
+                                        ? '00'
+                                        : _homeModel.totalDonor.toString(),
                                     style: TextStyle(
                                         fontSize: 22, color: kWhiteColor)),
                                 Text('Donors',
@@ -368,7 +372,10 @@ class _HomeState extends State<Home> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Text(_homeModel == null ? '00' : _homeModel.totalRequest.toString(),
+                                Text(
+                                    _homeModel == null
+                                        ? '00'
+                                        : _homeModel.totalRequest.toString(),
                                     style: TextStyle(
                                         fontSize: 22, color: kWhiteColor)),
                                 Text('Request',
@@ -410,7 +417,10 @@ class _HomeState extends State<Home> {
                             color: kBlackColor)),
                     InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => PostActivity()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PostActivity()));
                       },
                       child: Row(
                         children: <Widget>[
@@ -427,9 +437,13 @@ class _HomeState extends State<Home> {
                 ),
               ),
               SizedBox(height: 5),
-              _homeModel == null ? Container() : _homeModel.recentActivities.length == 0 ? Container() : Column(
-                children: cards,
-              ),
+              _homeModel == null
+                  ? Container()
+                  : _homeModel.recentActivities.length == 0
+                      ? Container()
+                      : Column(
+                          children: cards,
+                        ),
             ],
           ),
         ),
@@ -438,3 +452,102 @@ class _HomeState extends State<Home> {
   }
 }
 
+class NotificationCard extends StatelessWidget {
+  const NotificationCard({
+    @required this.message,
+    @required this.name,
+    @required this.time,
+    @required this.image,
+    @required this.ignoreFunction,
+    @required this.responseFunction,
+  });
+
+  final String image, time, message, name;
+  final Function ignoreFunction, responseFunction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Container(
+        color: kWhiteColor,
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage:
+                            AssetImage('assets/images/user-img.jpg'),
+                      ),
+                      SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            '$name',
+                            style: TextStyle(fontSize: 14, color: kBlackColor),
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.access_time,
+                                  size: 18, color: kBorderGreyColor),
+                              SizedBox(width: 10),
+                              Text(
+                                '${time.split(' ')[1]}    ${time.split(' ')[0]}',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: kBlackColor,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            '$message',
+                            style: TextStyle(fontSize: 10, color: kBlackColor),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  ButtonBar(
+                    buttonPadding: EdgeInsets.all(0),
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('Ignore'),
+                        onPressed: ignoreFunction,
+                        textColor: kBorderGreyColor,
+                        padding: EdgeInsets.all(8),
+                      ),
+                      SizedBox(width: 10),
+                      FlatButton(
+                        child: Text('Response'),
+                        onPressed: responseFunction,
+                        textColor: kDarkPurpleColor,
+                        padding: EdgeInsets.all(8),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: 5),
+    ]);
+  }
+}

@@ -12,6 +12,7 @@ class _Repository {
   Future<ResponseObject> register() async => _userAuthAPIServices.register();
   Future<ResponseObject> getHomeData() async => _homeAPIServices.getHomeData();
   Future<ResponseObject> changeDonorMode(int status) async => _homeAPIServices.changeDonorMode(status);
+  Future<ResponseObject> getAllNotifications() async => _homeAPIServices.getAllNotifications();
 }
 
 final repository = _Repository();
