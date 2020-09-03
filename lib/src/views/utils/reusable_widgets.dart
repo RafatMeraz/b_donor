@@ -229,6 +229,14 @@ showErrorToast(String message) {
       textStyle: TextStyle(color: kWhiteColor));
 }
 
+showSuccessToast(String message) {
+  BotToast.showText(
+      text: message,
+      borderRadius: BorderRadius.circular(30),
+      contentColor: Colors.green,
+      textStyle: TextStyle(color: kWhiteColor));
+}
+
 class ActivityCard extends StatelessWidget {
   ActivityCard({
     @required this.userName,
