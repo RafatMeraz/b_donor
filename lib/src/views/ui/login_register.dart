@@ -1,8 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:organize_flutter_project/src/business_logic/services/firebase_services.dart';
 import 'package:organize_flutter_project/src/views/ui/verify_number.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
+import 'package:http/http.dart' as http;
 
-class LoginRegister extends StatelessWidget {
+class LoginRegister extends StatefulWidget {
+  @override
+  _LoginRegisterState createState() => _LoginRegisterState();
+}
+
+class _LoginRegisterState extends State<LoginRegister> {
+
+//  void fbLogin() async {
+//    final facebookLogin = FacebookLogin();
+//    final facebookLoginResult = await facebookLogin.logIn(['email']);
+//
+//    if (facebookLoginResult != null) {
+//      if (facebookLoginResult.accessToken != null &&
+//          facebookLoginResult.accessToken.token != null) {
+//        final token = facebookLoginResult.accessToken.token;
+//        final graphResponse = await http.get(
+//            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=$token');
+//        final profile = json.decode(graphResponse.body);
+//        print("profile : $profile");
+//
+//        if (profile != null) {
+////          RegistrationData.socialId = profile['id'];
+////          RegistrationData.socialLogin = '1';
+////          RegistrationData.email = profile['email'];
+////          UserData.socialLogin = true;
+////
+////          var _emailResponse = await checkEmailExists();
+////          if (_emailResponse) {
+////            Navigator.push(context,
+////                MaterialPageRoute(builder: (context) => SocialPhone()));
+////          } else {
+////            Navigator.pushAndRemoveUntil(
+////                context,
+////                MaterialPageRoute(
+////                    builder: (context) => HomeBottomNavigationBar()),
+////                (route) => false);
+////          }
+//        } else {
+//          showErrorToast('Login with email failed! Try again.');
+//        }
+//      }
+//    }
+//  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +68,8 @@ class LoginRegister extends StatelessWidget {
               ),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyMobileNumber()));
+//                  fbLogin();
+//                  Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyMobileNumber()));
                 },
                 child: Container(
                   width: 280,
@@ -56,8 +103,13 @@ class LoginRegister extends StatelessWidget {
                 height: 16
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyMobileNumber()));
+                onTap: () async{
+                  var result = await signInWithGoogle();
+                  if (result){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyMobileNumber()));
+                  } else {
+                    print('SignIn failed!');
+                  }
                 },
                 child: Container(
                   width: 280,

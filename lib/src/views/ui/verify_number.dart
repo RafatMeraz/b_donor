@@ -45,7 +45,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
       print(phoneAuthCredential);
     }
 
-    void verificationFailed(FirebaseAuthException error) {
+    void verificationFailed(Exception error) {
       print(error);
     }
 
