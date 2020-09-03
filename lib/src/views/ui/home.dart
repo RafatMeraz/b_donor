@@ -68,6 +68,61 @@ class _HomeState extends State<Home> {
     }
   }
 
+  // get all home data from api
+  getAllNotifications() async{
+    setState(() {
+      inProgress = true;
+    });
+    var _response = await repository.getHomeData();
+    if (_response.id == ResponseCode.SUCCESSFUL){
+      _homeModel = _response.object;
+      donorMode = _homeModel.donorMode == 1;
+      cards.clear();
+      _homeModel.recentActivities.forEach((element) {
+        cards.add(Column(
+          children: <Widget>[
+            ActivityCard(
+              userName: element.user.name,
+              descriptions: element.activity.description,
+              image: element.activity.image,
+              location: element.activity.address,
+              reacts: element.reacts,
+              time: element.activity.time,
+            ),
+            SizedBox(height: 5),
+          ],
+        ));
+      });
+      setState(() {
+        inProgress = false;
+      });
+    } else {
+      setState(() {
+        inProgress = false;
+      });
+      showErrorToast(_response.object);
+    }
+  }
+
+  // change user mode from api
+  changeUserMode(int mode) async{
+    setState(() {
+      inProgress = true;
+    });
+    var _response = await repository.changeDonorMode(mode);
+    if (_response.id == ResponseCode.SUCCESSFUL){
+      setState(() {
+        donorMode = !donorMode;
+        inProgress = false;
+      });
+    } else {
+      setState(() {
+        inProgress = false;
+      });
+      showErrorToast(_response.object);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,9 +168,7 @@ class _HomeState extends State<Home> {
                   trackColor: kSoftBlueColor,
                   value: donorMode,
                   onChanged: (val) {
-                    setState(() {
-                      donorMode = val;
-                    });
+                    changeUserMode(val?1:0);
                   },
                 ),
               ),
@@ -197,7 +250,30 @@ class _HomeState extends State<Home> {
                     Icons.notifications,
                     color: kWhiteColor,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext bc){
+                          return Container(
+                            child: new Wrap(
+                              children: <Widget>[
+                                new ListTile(
+                                    leading: new Icon(Icons.music_note),
+                                    title: new Text('Music'),
+                                    onTap: () => {}
+                                ),
+                                new ListTile(
+                                  leading: new Icon(Icons.videocam),
+                                  title: new Text('Video'),
+                                  onTap: () => {},
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                    );
+                  },
                 )
               ],
             ),
@@ -362,135 +438,3 @@ class _HomeState extends State<Home> {
   }
 }
 
-class ActivityCard extends StatelessWidget {
-  const ActivityCard({
-    @required this.userName,
-    @required this.location,
-    @required this.image,
-    @required this.descriptions,
-    @required this.time,
-    @required this.reacts,
-  });
-
-  final String userName, location, image, descriptions, time;
-  final int reacts;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: kWhiteColor,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: kPurpleColor,
-                  backgroundImage:
-                      image == null ? AssetImage('assets/images/user-img.jpg') : AssetImage('assets/images/user-img.jpg'),
-                ),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    InkWell(
-                        child: Text('$userName',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold)),
-                      onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
-                      },
-                    ),
-                    SizedBox(height: 5),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.access_time,
-                          color: kBorderGreyColor,
-                          size: 16,
-                        ),
-                        SizedBox(width: 5),
-                        Text('${time.split(' ')[1]}    ${time.split(' ')[0]}',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                                color: kBorderGreyColor)),
-                        SizedBox(width: 15),
-                        Icon(
-                          Icons.location_on,
-                          color: kBorderGreyColor,
-                          size: 16,
-                        ),
-                        SizedBox(width: 5),
-                        Text('$location',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                                color: kBorderGreyColor)),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Image.asset(
-              image == null ? 'assets/images/donate-blood.png' : 'assets/images/donate-blood.png',
-              width: MediaQuery.of(context).size.width,
-              height: 290,
-              fit: BoxFit.cover),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.favorite_border, size: 20),
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border:
-                              Border.all(width: 1, color: kGreyColor)),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      '$reacts',
-                      style: TextStyle(
-                          color: kBorderGreyColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: 20),
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.share, size: 20),
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border:
-                              Border.all(width: 1, color: kGreyColor)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '$descriptions',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(color: kTextGreyColor, fontSize: 12),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}

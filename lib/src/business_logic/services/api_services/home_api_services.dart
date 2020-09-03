@@ -27,4 +27,26 @@ class HomeAPIServices {
       return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
     }
   }
+
+  // change donor mode
+  Future<ResponseObject> changeDonorMode(int status) async {
+    try {
+      var _response = await _client.post(BASE_URL + 'donorMode',
+          body: {'user_id': UserData.userId.toString(), 'mode': status.toString()});
+      print(jsonDecode(_response.body));
+      if (_response.statusCode == 200) {
+        var decodedResponse = jsonDecode(_response.body);
+        print(decodedResponse);
+        return ResponseObject(
+            id: ResponseCode.SUCCESSFUL, object: 'Donor mode changed!');
+      } else {
+        return ResponseObject(
+            id: ResponseCode.FAILED,
+            object: 'Status code for request ${_response.statusCode}');
+      }
+    } catch (e) {
+      return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
+    }
+  }
+
 }

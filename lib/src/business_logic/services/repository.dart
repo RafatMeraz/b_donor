@@ -11,6 +11,7 @@ class _Repository {
   Future<ResponseObject> checkPhoneExists(String phone) async => _userAuthAPIServices.phoneExistsOrNot(phone);
   Future<ResponseObject> register() async => _userAuthAPIServices.register();
   Future<ResponseObject> getHomeData() async => _homeAPIServices.getHomeData();
+  Future<ResponseObject> changeDonorMode(int status) async => _homeAPIServices.changeDonorMode(status);
 }
 
 final repository = _Repository();
