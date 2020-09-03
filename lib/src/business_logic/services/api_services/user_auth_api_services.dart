@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:organize_flutter_project/src/business_logic/models/email_exists_model.dart';
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/api_response_object.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
-
-const BASE_URL = 'http://192.168.43.136:6000/';
 
 class UserAuthAPIServices {
   final _client = http.Client();
@@ -24,14 +23,14 @@ class UserAuthAPIServices {
               id: ResponseCode.SUCCESSFUL, object: 'not exists');
         } else {
           HiveServices.addIntegerData(
-              name: 'id', data: decodedResponse['user'][0]['id']);
+              name: 'id', data: int.parse(decodedResponse['user'][0]['id']));
           HiveServices.addStringData(
               name: 'email', data: decodedResponse['user'][0]['email']);
           HiveServices.addStringData(
               name: 'name', data: decodedResponse['user'][0]['name']);
           HiveServices.addStringData(
               name: 'phone', data: decodedResponse['user'][0]['phone']);
-          UserData.userId = decodedResponse['user'][0]['id'];
+          UserData.userId = int.parse(decodedResponse['user'][0]['id']);
           UserData.email = decodedResponse['user'][0]['email'];
           UserData.name = decodedResponse['user'][0]['name'];
           UserData.phone = decodedResponse['user'][0]['phone'];
@@ -61,8 +60,9 @@ class UserAuthAPIServices {
           return ResponseObject(id: ResponseCode.SUCCESSFUL, object: 'not exists');
         } else {
           if (emailExistCheck == EmailExistCheck.LoginCheck) {
+            final _emailExits = EmailModel.fromJson(decodedResponse);
             HiveServices.addIntegerData(
-                name: 'id', data: decodedResponse['user'][0]['id']);
+                name: 'id', data: _emailExits.user[0].id);
             HiveServices.addStringData(
                 name: 'email', data: decodedResponse['user'][0]['email']);
             HiveServices.addStringData(

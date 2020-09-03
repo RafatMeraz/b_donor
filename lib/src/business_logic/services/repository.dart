@@ -8,6 +8,7 @@ class _Repository {
   final HomeAPIServices _homeAPIServices = HomeAPIServices();
 
   Future<ResponseObject> checkEmailExists(String email, EmailExistCheck emailExistCheck) async => _userAuthAPIServices.emailExistsOrNot(email, emailExistCheck);
+  Future<ResponseObject> checkPhoneExists(String phone) async => _userAuthAPIServices.phoneExistsOrNot(phone);
   Future<ResponseObject> register() async => _userAuthAPIServices.register();
   Future<ResponseObject> getHomeData() async => _homeAPIServices.getHomeData();
 }

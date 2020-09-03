@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
   bool donorMode = false, inProgress = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeModel _homeModel;
+  List<Column> cards = List();
 
   @override
   void initState() {
@@ -40,8 +41,24 @@ class _HomeState extends State<Home> {
     if (_response.id == ResponseCode.SUCCESSFUL){
       _homeModel = _response.object;
       donorMode = _homeModel.donorMode == 1;
+      cards.clear();
+      _homeModel.recentActivities.forEach((element) {
+        cards.add(Column(
+          children: <Widget>[
+            ActivityCard(
+              userName: element.user.name,
+              descriptions: element.activity.description,
+              image: element.activity.image,
+              location: element.activity.address,
+              reacts: element.reacts,
+              time: element.activity.time,
+            ),
+            SizedBox(height: 5),
+          ],
+        ));
+      });
       setState(() {
-
+        inProgress = false;
       });
     } else {
       setState(() {
@@ -334,129 +351,8 @@ class _HomeState extends State<Home> {
                 ),
               ),
               SizedBox(height: 5),
-              _homeModel == null ? Container() : _homeModel.recentActivities.length == 0 ? Container() : ListView.builder(
-                itemCount: _homeModel.recentActivities.length,
-                itemBuilder: (context, index){
-                  return Row(
-                    children: <Widget>[
-                      ActivityCard(
-                        userName: _homeModel.recentActivities[index].user.name,
-                        descriptions: _homeModel.recentActivities[index].activity.description,
-                        image: _homeModel.recentActivities[index].activity.image,
-                        location: _homeModel.recentActivities[index].activity.address,
-                        reacts: _homeModel.recentActivities[index].reacts,
-                        time: _homeModel.recentActivities[index].activity.time,
-                      ),
-                      SizedBox(height: 5),
-                    ],
-                  );
-                },
-              ),
-              Container(
-                color: kWhiteColor,
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundColor: kPurpleColor,
-                            backgroundImage:
-                                AssetImage('assets/images/user-img.jpg'),
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text('Jym Ben',
-                                  style: TextStyle(
-                                      fontSize: 14, fontWeight: FontWeight.bold)),
-                              SizedBox(height: 5),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.access_time,
-                                    color: kBorderGreyColor,
-                                    size: 16,
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text('6m age',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w500,
-                                          color: kBorderGreyColor)),
-                                  SizedBox(width: 15),
-                                  Icon(
-                                    Icons.location_on,
-                                    color: kBorderGreyColor,
-                                    size: 16,
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text('Mubmai',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w500,
-                                          color: kBorderGreyColor)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Image.asset('assets/images/donate-blood.png',
-                        width: MediaQuery.of(context).size.width,
-                        height: 290,
-                        fit: BoxFit.cover),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(Icons.favorite_border, size: 20),
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    border:
-                                        Border.all(width: 1, color: kGreyColor)),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                '87434',
-                                style: TextStyle(
-                                    color: kBorderGreyColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 20),
-                              Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(Icons.share, size: 20),
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    border:
-                                        Border.all(width: 1, color: kGreyColor)),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem',
-                            style: TextStyle(color: kTextGreyColor, fontSize: 12),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+              _homeModel == null ? Container() : _homeModel.recentActivities.length == 0 ? Container() : Column(
+                children: cards,
               ),
             ],
           ),
@@ -517,7 +413,7 @@ class ActivityCard extends StatelessWidget {
                           size: 16,
                         ),
                         SizedBox(width: 5),
-                        Text('${time.split(' ')[0]}',
+                        Text('${time.split(' ')[1]}    ${time.split(' ')[0]}',
                             style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
@@ -529,7 +425,7 @@ class ActivityCard extends StatelessWidget {
                           size: 16,
                         ),
                         SizedBox(width: 5),
-                        Text('Location',
+                        Text('$location',
                             style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
@@ -549,6 +445,7 @@ class ActivityCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
                   children: <Widget>[
@@ -586,6 +483,7 @@ class ActivityCard extends StatelessWidget {
                 SizedBox(height: 10),
                 Text(
                   '$descriptions',
+                  textAlign: TextAlign.start,
                   style: TextStyle(color: kTextGreyColor, fontSize: 12),
                 )
               ],

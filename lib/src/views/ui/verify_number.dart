@@ -171,7 +171,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
   }
 
   checkPhoneExists() async{
-    var _response = await repository.checkEmailExists(RegisterUserData.email, EmailExistCheck.ExistsCheck);
+    var _response = await repository.checkPhoneExists('+8801'+_phoneNumberController.text);
     if (_response.id == ResponseCode.SUCCESSFUL) {
       setState(() {
         inProgress = false;

@@ -87,6 +87,7 @@ class _SplashState extends State<Splash> {
       UserData.phone = HiveServices.getData(name: 'name');
       UserData.email = HiveServices.getData(name: 'email');
       UserData.phone = HiveServices.getData(name: 'phone');
+      print(userId);
       return true;
     }
   }
