@@ -29,7 +29,7 @@ class HomeAPIServices {
     }
   }
 
-  // check into api that email is already registered or not
+  // get all my notifications
   Future<ResponseObject> getAllNotifications() async {
     try {
       var _response = await _client.post(BASE_URL + 'getAllMyRequest',
@@ -99,5 +99,27 @@ class HomeAPIServices {
       return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
     }
   }
+
+  // react to a activity
+  Future<ResponseObject> reactToActivity(int id) async {
+    try {
+      var _response = await _client.post(BASE_URL + 'reactToActivity',
+          body: {'user_id': UserData.userId.toString(), 'id': id.toString()});
+      print(jsonDecode(_response.body));
+      if (_response.statusCode == 200) {
+        var decodedResponse = jsonDecode(_response.body);
+        print(decodedResponse);
+        return ResponseObject(
+            id: ResponseCode.SUCCESSFUL, object: 'React done!');
+      } else {
+        return ResponseObject(
+            id: ResponseCode.FAILED,
+            object: 'Status code for request ${_response.statusCode}');
+      }
+    } catch (e) {
+      return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
+    }
+  }
+
 
 }

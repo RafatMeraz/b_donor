@@ -49,6 +49,8 @@ class _HomeState extends State<Home> {
         cards.add(Column(
           children: <Widget>[
             ActivityCard(
+              id: element.activity.id,
+              reactionFunction: reactToActivity,
               gender: element.user.gender,
               userImage: element.user.image,
               userName: element.user.name,
@@ -57,6 +59,7 @@ class _HomeState extends State<Home> {
               location: element.activity.address,
               reacts: element.reacts,
               time: element.activity.time,
+              state: element.state,
             ),
             SizedBox(height: 5),
           ],
@@ -115,6 +118,22 @@ class _HomeState extends State<Home> {
         isVisible = false;
       });
       Navigator.of(context).pop();
+      getAllHomeData();
+    } else {
+      setState(() {
+        isVisible = false;
+      });
+      showErrorToast(_response.object);
+    }
+  }
+
+  // react to a activity
+  reactToActivity(int id) async {
+    setState(() {
+      inProgress = true;
+    });
+    var _response = await repository.reactToActivity(id);
+    if (_response.id == ResponseCode.SUCCESSFUL) {
       getAllHomeData();
     } else {
       setState(() {

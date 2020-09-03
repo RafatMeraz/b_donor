@@ -230,8 +230,10 @@ showErrorToast(String message) {
 }
 
 class ActivityCard extends StatelessWidget {
-  const ActivityCard({
+  ActivityCard({
     @required this.userName,
+    @required this.id,
+    @required this.reactionFunction,
     @required this.gender,
     @required this.userImage,
     @required this.location,
@@ -239,10 +241,13 @@ class ActivityCard extends StatelessWidget {
     @required this.descriptions,
     @required this.time,
     @required this.reacts,
+    @required this.state,
   });
 
   final String userName, gender, userImage, location, image, descriptions, time;
-  final int reacts;
+  final int reacts, id, state;
+  final Function reactionFunction;
+  bool changeIcon = false;
 
   @override
   Widget build(BuildContext context) {
@@ -334,14 +339,25 @@ class ActivityCard extends StatelessWidget {
                 SizedBox(height: 10),
                 Row(
                   children: <Widget>[
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.favorite_border, size: 20),
+                    InkWell(
+                      onTap: () {
+                        if (state == 0 && changeIcon == false) {
+                          reactionFunction(id);
+                          changeIcon = true;
+                        }
+                      },
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: changeIcon == false ? state == 1 ? Icon(Icons
+                              .favorite, color: Colors.red, size: 20) : Icon(
+                              Icons.favorite_border, size: 20) : Icon(Icons
+                              .favorite, color: Colors.red, size: 20),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(width: 1, color: kGreyColor)),
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(width: 1, color: kGreyColor)),
                     ),
                     SizedBox(width: 10),
                     Text(

@@ -24,27 +24,15 @@ class HomeModel {
       });
     }
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['donorMode'] = this.donorMode;
-    data['totalRequest'] = this.totalRequest;
-    data['totalDonor'] = this.totalDonor;
-    data['totalNotifications'] = this.totalNotifications;
-    if (this.recentActivities != null) {
-      data['recentActivities'] =
-          this.recentActivities.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
 }
 
 class RecentActivities {
   Activity activity;
   User user;
   int reacts;
+  int state;
 
-  RecentActivities({this.activity, this.user, this.reacts});
+  RecentActivities({this.activity, this.user, this.reacts, this.state});
 
   RecentActivities.fromJson(Map<String, dynamic> json) {
     activity = json['activity'] != null
@@ -52,25 +40,14 @@ class RecentActivities {
         : null;
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
     reacts = json['reacts'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.activity != null) {
-      data['activity'] = this.activity.toJson();
-    }
-    if (this.user != null) {
-      data['user'] = this.user.toJson();
-    }
-    data['reacts'] = this.reacts;
-    return data;
+    state = json['state'];
   }
 }
 
 class Activity {
   int id;
   String address;
-  String image;
+  Null image;
   String time;
   int userId;
   String description;
@@ -90,17 +67,6 @@ class Activity {
     time = json['time'];
     userId = json['userId'];
     description = json['description'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['address'] = this.address;
-    data['image'] = this.image;
-    data['time'] = this.time;
-    data['userId'] = this.userId;
-    data['description'] = this.description;
-    return data;
   }
 }
 
@@ -151,24 +117,5 @@ class User {
     donorMode = json['donorMode'];
     zipCode = json['zipCode'];
     division = json['division'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['gender'] = this.gender;
-    data['email'] = this.email;
-    data['address'] = this.address;
-    data['bloodGroup'] = this.bloodGroup;
-    data['socialLogin'] = this.socialLogin;
-    data['socialId'] = this.socialId;
-    data['image'] = this.image;
-    data['contactVisiable'] = this.contactVisiable;
-    data['donorMode'] = this.donorMode;
-    data['zipCode'] = this.zipCode;
-    data['division'] = this.division;
-    return data;
   }
 }
