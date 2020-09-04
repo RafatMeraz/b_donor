@@ -40,7 +40,8 @@ People will be connecting with each other to find or donate blood for saving lif
 -	**Exercise Suggestion**
     -	This will help with basic exercise suggestion.
     - showing basic steps & directions, limits, with their benefits.
-    
+### App Screenshots
+
 ![Register](https://i.imgur.com/Dg5f321.jpg)
 ![Verification](https://i.imgur.com/YE7rcM2.jpg)
 ![Become a donor](https://i.imgur.com/RtO9oVc.jpg)
