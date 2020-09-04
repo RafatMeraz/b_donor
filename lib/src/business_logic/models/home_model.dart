@@ -79,7 +79,7 @@ class User {
   String address;
   String bloodGroup;
   int socialLogin;
-  Null socialId;
+  String socialId;
   String image;
   int contactVisiable;
   int donorMode;

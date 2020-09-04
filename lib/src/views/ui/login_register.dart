@@ -3,7 +3,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
-import 'package:organize_flutter_project/src/views/ui/become_donor.dart';
 import 'package:organize_flutter_project/src/views/ui/home.dart';
 import 'package:organize_flutter_project/src/views/ui/verify_number.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
@@ -68,6 +67,7 @@ class _LoginRegisterState extends State<LoginRegister> {
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> Home()), (route) => false);
       }
     } else {
+      print('Here error!');
       setState(() {
         inProgress = false;
       });
@@ -109,7 +109,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                 InkWell(
                   onTap: (){
 //                  fbLogin();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
+//                    Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
                   },
                   child: Container(
                     width: 280,
