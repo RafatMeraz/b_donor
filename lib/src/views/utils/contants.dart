@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-const IMG_BASE_URL = 'http://192.168.0.102:6000/';
+const IMG_BASE_URL = 'http://bdonorapi.aapbd.com/';
 
 const Color kPurpleColor = Color(0xFFFF217A);
 const Color kDarkPurpleColor = Color(0xFFFF4D4D);
