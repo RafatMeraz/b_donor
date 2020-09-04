@@ -1,12 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:organize_flutter_project/src/business_logic/models/user_profile_view_model.dart';
+import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
+import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
 class UserProfile extends StatefulWidget {
+  UserProfile({this.id});
+  final int id;
   @override
   _UserProfileState createState() => _UserProfileState();
 }
 
 class _UserProfileState extends State<UserProfile> {
+  UserProfileViewModel _profileModel;
+  bool inProgress = false;
+  List<Column> cards = List();
+
+  // react to a activity
+  reactToActivity(int id) async {
+    setState(() {
+      inProgress = true;
+    });
+    var _response = await repository.reactToActivity(id);
+    if (_response.id == ResponseCode.SUCCESSFUL) {
+      getAnotherProfileData();
+    } else {
+      setState(() {
+        inProgress = false;
+      });
+      showErrorToast(_response.object);
+    }
+  }
+
+  getAnotherProfileData() async {
+    setState(() {
+      inProgress = true;
+    });
+    final _response = await repository.getAnotherProfile(widget.id);
+    if (_response.id == ResponseCode.SUCCESSFUL) {
+      cards.clear();
+      _profileModel = _response.object;
+      for (int i=0; i<_profileModel.activities.length; i++){
+        cards.add(Column(
+          children: <Widget>[
+            ActivityCard(
+              userId: _profileModel.userData.id,
+              id: _profileModel.activities[i].activity.id,
+              reactionFunction: reactToActivity,
+              gender: _profileModel.userData.gender,
+              userImage: _profileModel.userData.image,
+              userName: _profileModel.userData.name,
+              descriptions: _profileModel.activities[i].activity.description,
+              image: _profileModel.activities[i].activity.image,
+              location: _profileModel.activities[i].activity.address,
+              reacts: _profileModel.activities[i].reacts,
+              time: _profileModel.activities[i].activity.time,
+              state:  _profileModel.activities[i].state,
+            ),
+            SizedBox(height: 5),
+          ],
+        ));
+      }
+      setState(() {
+        inProgress = false;
+      });
+    } else {
+      setState(() {
+        inProgress = false;
+      });
+      showErrorToast(_response.object);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAnotherProfileData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +87,7 @@ class _UserProfileState extends State<UserProfile> {
         backgroundColor: kWhiteColor,
         elevation: 0,
         leading: BackButton(color: kSoftBlueColor),
-        title: Text('Md Fahd Alam C', style: TextStyle(fontSize: 14, color: kBlackColor)),
+        title: Text(_profileModel == null ? 'username' : _profileModel.userData.name, style: TextStyle(fontSize: 14, color: kBlackColor)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -33,7 +105,14 @@ class _UserProfileState extends State<UserProfile> {
                     child: CircleAvatar(
                       radius: 45,
                       backgroundColor: kSoftBlueColor,
-                      backgroundImage: AssetImage('assets/images/user-img.jpg'),
+                      backgroundImage: _profileModel == null
+                          ? AssetImage('assets/images/user-boy.png')
+                          : _profileModel.userData.image == null
+                          ? _profileModel.userData.gender == 'Male'
+                          ? AssetImage('assets/images/user-boy.png')
+                          : AssetImage('assets/images/user-girl.png')
+                          : NetworkImage(IMG_BASE_URL +
+                          _profileModel.userData.image),
                     ),
                   ),
                   SizedBox(width: 20),
@@ -46,14 +125,20 @@ class _UserProfileState extends State<UserProfile> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                Text('4', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: kPurpleColor)),
+                                Text( _profileModel == null
+                    ? '0'
+                        : _profileModel.totalDonate
+                        .toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: kPurpleColor)),
                                 SizedBox(height: 5),
                                 Text('Donated', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBlackColor)),
                               ],
                             ),
                             Column(
                               children: <Widget>[
-                                Text('125', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: kPurpleColor)),
+                                Text(_profileModel == null
+                            ? '0'
+                                : _profileModel.totalRequest
+                                .toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: kPurpleColor)),
                                 SizedBox(height: 5),
                                 Text('Requests', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBlackColor)),
                               ],
@@ -62,7 +147,9 @@ class _UserProfileState extends State<UserProfile> {
                               children: <Widget>[
                                 Icon(Icons.favorite_border, size: 25, color: kPurpleColor),
                                 SizedBox(height: 5),
-                                Text('25', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBlackColor)),
+                                Text(_profileModel == null
+                                    ? '0'
+                                    : _profileModel.totalLove.toString(), style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBlackColor)),
                               ],
                             ),
                           ],
@@ -88,7 +175,11 @@ class _UserProfileState extends State<UserProfile> {
                                 children: <Widget>[
                                   Icon(Icons.star, color: kWhiteColor, size: 20),
                                   SizedBox(width: 5),
-                                  Text('HERO DONOR', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kWhiteColor)),
+                                  Text( _profileModel == null
+                                      ? 'DONOR'
+                                      : _profileModel.totalDonate >= 3
+                                      ? 'HERO DONOR'
+                                      : 'DONOR', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kWhiteColor)),
                                 ],
                               ),
                             ),
@@ -122,15 +213,16 @@ class _UserProfileState extends State<UserProfile> {
                     children: <Widget>[
                       Icon(Icons.location_on, color: kBorderGreyColor, size: 20),
                       SizedBox(width: 10),
-                      Text('Dhaka, Bangladesh', style: TextStyle(fontSize: 12, color: kBlackColor, fontWeight: FontWeight.w500))
+                      Text(_profileModel == null
+                          ? 'Dhaka, Bangladesh'
+                          : _profileModel.userData.address +
+                          ', ' +
+                          _profileModel.userData.division +
+                          ', ' +
+                          _profileModel.userData.zipCode, style: TextStyle(fontSize: 12, color: kBlackColor, fontWeight: FontWeight.w500))
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-                      maxLines: 5,
-                      style: TextStyle(fontSize: 12, color: kSoftBlueColor, fontWeight: FontWeight.w500)),
+
                   SizedBox(
                     height: 25,
                   ),
@@ -149,94 +241,9 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             SizedBox(height: 5),
-            Container(
-              color: kWhiteColor,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: kPurpleColor,
-                          backgroundImage: AssetImage('assets/images/user-img.jpg'),
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('Jym Ben', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            SizedBox(height: 5),
-                            Row(
-                              children: <Widget>[
-                                Icon(Icons.access_time, color: kBorderGreyColor, size: 16,),
-                                SizedBox(width: 5),
-                                Text('6m age', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBorderGreyColor)),
-                                SizedBox(width: 15),
-                                Icon(Icons.location_on, color: kBorderGreyColor, size: 16,),
-                                SizedBox(width: 5),
-                                Text('Mubmai', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: kBorderGreyColor)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Image.asset('assets/images/donate-blood.png', width: MediaQuery.of(context).size.width, height: 290, fit: BoxFit.cover),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(Icons.favorite_border, size: 20),
-                              ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(width: 1, color: kGreyColor)
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              '87434',
-                              style: TextStyle(
-                                  color: kBorderGreyColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(Icons.share, size: 20),
-                              ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(width: 1, color: kGreyColor)
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem',
-                          style: TextStyle(
-                              color: kTextGreyColor,
-                              fontSize: 12
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+            _profileModel == null ? Container() : Column(
+              children: cards,
+            )
           ],
         ),
       ),

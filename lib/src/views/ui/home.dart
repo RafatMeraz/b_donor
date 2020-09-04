@@ -50,6 +50,7 @@ class _HomeState extends State<Home> {
         cards.add(Column(
           children: <Widget>[
             ActivityCard(
+              userId: element.user.id,
               id: element.activity.id,
               reactionFunction: reactToActivity,
               gender: element.user.gender,

@@ -46,6 +46,7 @@ class _ProfileState extends State<Profile> {
         cards.add(Column(
           children: <Widget>[
             ActivityCard(
+              userId: _profileModel.userData.id,
               id: _profileModel.activities[i].activity.id,
               reactionFunction: reactToActivity,
               gender: _profileModel.userData.gender,

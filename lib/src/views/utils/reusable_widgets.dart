@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/business_logic/models/donor_model.dart';
 import 'package:organize_flutter_project/src/business_logic/models/request_model.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/ui/profile.dart';
 import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
 
 import 'contants.dart';
@@ -245,6 +246,7 @@ showSuccessToast(String message) {
 class ActivityCard extends StatelessWidget {
   ActivityCard({
     @required this.userName,
+    @required this.userId,
     @required this.id,
     @required this.reactionFunction,
     @required this.gender,
@@ -258,7 +260,7 @@ class ActivityCard extends StatelessWidget {
   });
 
   final String userName, gender, userImage, location, image, descriptions, time;
-  final int reacts, id, state;
+  final int reacts, id, userId, state;
   final Function reactionFunction;
   bool changeIcon = false;
 
@@ -272,14 +274,29 @@ class ActivityCard extends StatelessWidget {
             padding: const EdgeInsets.all(12.0),
             child: Row(
               children: <Widget>[
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: kPurpleColor,
-                  backgroundImage: userImage == null
-                      ? gender == 'Male' ? AssetImage(
-                      'assets/images/user-boy.png')
-                      : AssetImage('assets/images/user-img.jpg') : NetworkImage(
-                      IMG_BASE_URL + userImage),
+                InkWell(
+                  onTap: () {
+                    if (userId == UserData.userId) {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => Profile()
+                      ));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UserProfile(id: userId)));
+                    }
+                  },
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: kPurpleColor,
+                    backgroundImage: userImage == null
+                        ? gender == 'Male' ? AssetImage(
+                        'assets/images/user-boy.png')
+                        : AssetImage('assets/images/user-img.jpg') : NetworkImage(
+                        IMG_BASE_URL + userImage),
+                  ),
                 ),
                 SizedBox(width: 10),
                 Column(
@@ -290,10 +307,17 @@ class ActivityCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.bold)),
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UserProfile()));
+                        if (userId == UserData.userId) {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => Profile()
+                          ));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserProfile(id: userId)));
+                        }
                       },
                     ),
                     SizedBox(height: 5),
