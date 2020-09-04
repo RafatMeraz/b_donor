@@ -1,7 +1,7 @@
 import pandas as pd
 
 def get_all():
-    url = 'G:\\DS\\3.Personal_Projects\\Blood_Donor_Recommendation_Engine\\donor_data.json'
+    url = 'http://bdonorapi.aapbd.com/register/b_donor_api/public/donor'
     data = pd.read_json(url, orient='columns')
     data = data[data['Availability']==1]
     data['rating'] = data['Donate'] / data['Request']
@@ -10,7 +10,7 @@ def get_all():
 def top10(blood, district):
     df = get_all()
     df = df[(df['Blood Group'] == blood) & (df['District'] == district)].sort_values('rating', ascending=False)
-    return df[['Name', 'Blood Group', 'Phone']].head(20)
+    return df[['Name', 'Blood Group', 'Phone']].head(10)
 
 def near_you(blood, district, desired_loc):
     df = get_all()
