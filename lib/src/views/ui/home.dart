@@ -137,7 +137,7 @@ class _HomeState extends State<Home> {
       getAllHomeData();
     } else {
       setState(() {
-        isVisible = false;
+        inProgress = false;
       });
       showErrorToast(_response.object);
     }
