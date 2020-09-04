@@ -22,17 +22,17 @@ class UserAuthAPIServices {
               id: ResponseCode.SUCCESSFUL, object: 'not exists');
         } else {
           HiveServices.addIntegerData(
-              name: 'id', data: int.parse(decodedResponse['user'][0]['id']));
+              name: 'id', data: int.parse(decodedResponse['user'][0]['id'].toString()));
           HiveServices.addStringData(
-              name: 'email', data: decodedResponse['user'][0]['email']);
+              name: 'email', data: decodedResponse['user'][0]['email'].toString());
           HiveServices.addStringData(
-              name: 'name', data: decodedResponse['user'][0]['name']);
+              name: 'name', data: decodedResponse['user'][0]['name'].toString());
           HiveServices.addStringData(
-              name: 'phone', data: decodedResponse['user'][0]['phone']);
-          UserData.userId = int.parse(decodedResponse['user'][0]['id']);
-          UserData.email = decodedResponse['user'][0]['email'];
-          UserData.name = decodedResponse['user'][0]['name'];
-          UserData.phone = decodedResponse['user'][0]['phone'];
+              name: 'phone', data: decodedResponse['user'][0]['phone'].toString());
+          UserData.userId = int.parse(decodedResponse['user'][0]['id'].toString());
+          UserData.email = decodedResponse['user'][0]['email'].toString();
+          UserData.name = decodedResponse['user'][0]['name'].toString();
+          UserData.phone = decodedResponse['user'][0]['phone'].toString();
           return ResponseObject(
               id: ResponseCode.SUCCESSFUL, object: 'exists');
         }
