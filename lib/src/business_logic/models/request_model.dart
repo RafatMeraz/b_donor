@@ -42,6 +42,7 @@ class Request {
   int userId;
   int hide;
   String bloodType;
+  String division;
 
   Request(
       {this.id,
@@ -67,6 +68,7 @@ class Request {
     time = json['time'];
     userId = json['userId'];
     hide = json['hide'];
+    division = json['division'];
     bloodType = json['bloodType'];
   }
 }

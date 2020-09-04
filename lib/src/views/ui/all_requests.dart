@@ -4,6 +4,7 @@ import 'package:organize_flutter_project/src/business_logic/models/request_model
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/add_new_request.dart';
+import 'package:organize_flutter_project/src/views/ui/response_screen.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
@@ -33,11 +34,36 @@ class _AllRequestsState extends State<AllRequests> {
             bloodType: element.request.bloodType,
             bloodGroup: element.request.bloodGroup,
             location: element.request.address,
-            responseFunction: () {}));
+            responseFunction: () {
+              if (element.user.id != UserData.userId){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ResponseScreen(request: element.request, userDetails: element.user, getAllRequest : getAllRequest)));
+              } else {
+                cancelRequest(element.request.id);
+              }
+            }));
       });
       setState(() {
         inProgress = false;
       });
+    } else {
+      setState(() {
+        inProgress = false;
+      });
+      showErrorToast(_response.object);
+    }
+  }
+
+  cancelRequest(int id) async {
+    setState(() {
+      inProgress = false;
+    });
+    var _response = await repository.cancelRequest(id);
+    if (_response.id == ResponseCode.SUCCESSFUL) {
+      setState(() {
+        inProgress = false;
+      });
+      getAllRequest();
+      showSuccessToast('Request cancelled!');
     } else {
       setState(() {
         inProgress = false;

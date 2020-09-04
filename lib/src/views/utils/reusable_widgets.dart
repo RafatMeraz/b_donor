@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/business_logic/models/donor_model.dart';
 import 'package:organize_flutter_project/src/business_logic/models/request_model.dart';
+import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
 
 import 'contants.dart';
@@ -696,10 +697,10 @@ class RequestCard extends StatelessWidget {
                           ),
                           RoundedBorderedRaisedButtonSmall(
                             backgroundColor: kWhiteColor,
-                            onTap: () {},
+                            onTap: responseFunction,
                             imageLink: null,
                             textColor: kPurpleColor,
-                            text: 'Response',
+                            text: user.id == UserData.userId ? 'Cancel' : 'Response',
                           )
                         ],
                       ),

@@ -66,4 +66,62 @@ class RequestAPIServices {
       return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
     }
   }
+
+  // response to request
+  Future<ResponseObject> responseToRequest(int id) async {
+    try {
+      var _response = await _client.post(BASE_URL + 'responseToRequest', body: {
+        'user_id' : UserData.userId.toString(),
+        'request_id' : id.toString(),
+        'code' : '1',
+      });
+      print(jsonDecode(_response.body));
+      if (_response.statusCode == 200) {
+        final decodedResponse = jsonDecode(_response.body);
+        print(decodedResponse);
+        if (decodedResponse['error'] == false){
+          return ResponseObject(
+              id: ResponseCode.SUCCESSFUL, object: 'Response done!');
+        } else {
+          return ResponseObject(
+              id: ResponseCode.FAILED, object: 'Response add failed! Try again.');
+        }
+      } else {
+        return ResponseObject(
+            id: ResponseCode.FAILED,
+            object: 'Status code for request ${_response.statusCode}');
+      }
+    } catch (e) {
+      return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
+    }
+  }
+
+  // cancel request
+  Future<ResponseObject> cancelRequest(int id) async {
+    try {
+      var _response = await _client.post(BASE_URL + 'responseToRequest', body: {
+        'user_id' : '0',
+        'request_id' : id.toString(),
+        'code' : '2',
+      });
+      print(jsonDecode(_response.body));
+      if (_response.statusCode == 200) {
+        final decodedResponse = jsonDecode(_response.body);
+        print(decodedResponse);
+        if (decodedResponse['error'] == false){
+          return ResponseObject(
+              id: ResponseCode.SUCCESSFUL, object: 'Request cancel!');
+        } else {
+          return ResponseObject(
+              id: ResponseCode.FAILED, object: 'Request cancel failed! Try again.');
+        }
+      } else {
+        return ResponseObject(
+            id: ResponseCode.FAILED,
+            object: 'Status code for request ${_response.statusCode}');
+      }
+    } catch (e) {
+      return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
+    }
+  }
 }

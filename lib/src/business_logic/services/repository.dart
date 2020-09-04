@@ -45,6 +45,8 @@ class _Repository {
   Future<ResponseObject> getAllDonor() async => _donorAPIServices.getAllDonor();
   Future<ResponseObject> askForHelp(int requestTo, String message) async => _donorAPIServices.askForHelp(requestTo, message);
   Future<ResponseObject> getAllRequest() async => _requestAPIServices.getAllRequest();
+  Future<ResponseObject> responseToRequest(int id) async => _requestAPIServices.responseToRequest(id);
+  Future<ResponseObject> cancelRequest(int id) async => _requestAPIServices.cancelRequest(id);
   Future<ResponseObject> createNewRequest(String address, String bloodFor, String bloodType, int units, String bloodGroup, String contact, String division) async => _requestAPIServices.createNewRequest(address, bloodFor, bloodType, units, bloodGroup, contact, division);
 }
 
