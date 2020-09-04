@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:organize_flutter_project/src/business_logic/services/api_services/donor_api_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/api_services/home_api_services.dart';
+import 'package:organize_flutter_project/src/business_logic/services/api_services/request_api_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/api_services/user_auth_api_services.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/api_response_object.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
@@ -10,6 +11,7 @@ class _Repository {
   final UserAuthAPIServices _userAuthAPIServices = UserAuthAPIServices();
   final HomeAPIServices _homeAPIServices = HomeAPIServices();
   final DonorAPIServices _donorAPIServices = DonorAPIServices();
+  final RequestAPIServices _requestAPIServices = RequestAPIServices();
 
   Future<ResponseObject> checkEmailExists(
           String email, EmailExistCheck emailExistCheck) async =>
@@ -42,6 +44,7 @@ class _Repository {
 
   Future<ResponseObject> getAllDonor() async => _donorAPIServices.getAllDonor();
   Future<ResponseObject> askForHelp(int requestTo, String message) async => _donorAPIServices.askForHelp(requestTo, message);
+  Future<ResponseObject> getAllRequest() async => _requestAPIServices.getAllRequest();
 }
 
 final repository = _Repository();

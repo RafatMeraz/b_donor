@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.0.101:6000/';
+const BASE_URL = 'http://192.168.0.102:6000/';
 
 class RegisterUserData {
   static String phone, name, email, bloodGroup, address, contactVisible, gender, zipCode, division, socialId, socialLogin = '0';

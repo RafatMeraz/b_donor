@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/business_logic/models/donor_model.dart';
+import 'package:organize_flutter_project/src/business_logic/models/request_model.dart';
 import 'package:organize_flutter_project/src/views/ui/user_profile.dart';
 
 import 'contants.dart';
@@ -559,7 +560,8 @@ class DonorCard extends StatelessWidget {
                                 color: kBorderGreyColor),
                             SizedBox(width: 10),
                             Text(
-                              '${donor.address}  ${donor.division}  ${donor.zipCode}',
+                              '${donor.address}, ${donor.division}, ${donor.zipCode}',
+                              maxLines: 4,
                               style: TextStyle(
                                   fontSize: 10,
                                   color: kBlackColor,
@@ -618,6 +620,161 @@ class DonorCard extends StatelessWidget {
             ],
           ),
         ),
+      ],
+    );
+  }
+}
+
+class RequestCard extends StatelessWidget {
+  const RequestCard({
+    @required this.id,
+    @required this.user,
+    @required this.bloodType,
+    @required this.bloodGroup,
+    @required this.location,
+    @required this.responseFunction,
+  });
+
+  final UserDetails user;
+  final String bloodType, bloodGroup, location;
+  final int id;
+  final Function responseFunction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Container(
+          color: kWhiteColor,
+          margin: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: kGreyColor,
+                      backgroundImage: user.image == null
+                          ? user.gender == 'Male'
+                          ? AssetImage('assets/images/user-boy.png')
+                          : AssetImage('assets/images/user-girl.png')
+                          : NetworkImage(IMG_BASE_URL + user.image),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            '${user.name}',
+                            maxLines: 1,
+                            style: TextStyle(fontSize: 13, color: kBlackColor),
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.location_on,
+                                  size: 18, color: kBorderGreyColor),
+                              SizedBox(width: 10),
+                              Text(
+                                '$location',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: kBlackColor,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          RoundedBorderedRaisedButtonSmall(
+                            backgroundColor: kWhiteColor,
+                            onTap: () {},
+                            imageLink: null,
+                            textColor: kPurpleColor,
+                            text: 'Response',
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 8, right: 4, top: 4, bottom: 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10)),
+                              gradient: LinearGradient(colors: [
+                                const Color(0xFFFF215D),
+                                const Color(0xFFFF4D4D),
+                              ])),
+                          child: Text(
+                            'Requested',
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              '$bloodGroup',
+                              style: TextStyle(
+                                  color: kPurpleColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                  width: 1, color: kBorderGreyColor)),
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 8, right: 4, top: 4, bottom: 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10)),
+                              gradient: LinearGradient(colors: [
+                                const Color(0xFFFF215D),
+                                const Color(0xFFFF4D4D),
+                              ])),
+                          child: Text(
+                            '$bloodType',
+                            style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 10),
       ],
     );
   }
