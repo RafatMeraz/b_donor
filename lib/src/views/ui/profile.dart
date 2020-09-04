@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/models/profile_model.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/ui/update_user_profile.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
@@ -38,6 +40,7 @@ class _ProfileState extends State<Profile> {
     });
     final _response = await repository.getProfileData();
     if (_response.id == ResponseCode.SUCCESSFUL) {
+      cards.clear();
       _profileModel = _response.object;
       for (int i=0; i<_profileModel.activities.length; i++){
         cards.add(Column(
@@ -89,7 +92,9 @@ class _ProfileState extends State<Profile> {
                 fontSize: 18, color: kBlackColor, fontWeight: FontWeight.bold)),
         actions: <Widget>[
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfile(userAllData: _profileModel.userData, getProfileData: getProfileData)));
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
               child: Text('EDIT',

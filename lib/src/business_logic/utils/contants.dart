@@ -4,6 +4,10 @@ class RegisterUserData {
   static String phone, name, email, bloodGroup, address, contactVisible, gender, zipCode, division, socialId, socialLogin = '0';
 }
 
+class UpdateUserData {
+  static String phone, name, bloodGroup, address, contactVisible, gender, zipCode, division;
+}
+
 class UserData {
   static int userId;
   static String phone, name, email;
