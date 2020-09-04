@@ -11,7 +11,23 @@ class RequestAPIServices {
   // check into api that email is already registered or not
   Future<ResponseObject> getAllRequest() async {
     try {
-      var _response = await _client.get(BASE_URL + 'getAllRequest');
+      var _response;
+      if (AllRequestFilter.bloodGroup != null && AllRequestFilter.division != null){
+        _response = await _client.post(BASE_URL + 'getAllRequest', body : {
+          'blood_group' : AllRequestFilter.bloodGroup,
+          'division' : AllRequestFilter.division,
+        });
+      } else if (AllRequestFilter.bloodGroup != null){
+        _response = await _client.post(BASE_URL + 'getAllRequest', body : {
+          'blood_group' : AllRequestFilter.bloodGroup,
+        });
+      } else if (AllRequestFilter.division != null) {
+        _response = await _client.post(BASE_URL + 'getAllRequest', body : {
+          'division' : AllRequestFilter.division,
+        });
+      } else {
+        _response = await _client.post(BASE_URL + 'getAllRequest');
+      }
       print(jsonDecode(_response.body));
       if (_response.statusCode == 200) {
         final decodedResponse = jsonDecode(_response.body);

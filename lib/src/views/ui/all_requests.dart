@@ -4,6 +4,7 @@ import 'package:organize_flutter_project/src/business_logic/models/request_model
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/add_new_request.dart';
+import 'package:organize_flutter_project/src/views/ui/filter.dart';
 import 'package:organize_flutter_project/src/views/ui/response_screen.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
@@ -77,35 +78,6 @@ class _AllRequestsState extends State<AllRequests> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: kGreyBgColor,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('Drawer Header'),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                const Color(0xFFFF215D),
-                const Color(0xFFFF4D4D),
-              ])),
-            ),
-            ListTile(
-              title: Text('Item 1'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
-            ListTile(
-              title: Text('Item 2'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
-          ],
-        ),
-      ),
       appBar: PreferredSize(
         preferredSize: Size(MediaQuery.of(context).size.width, 60),
         child: Container(
@@ -129,7 +101,9 @@ class _AllRequestsState extends State<AllRequests> {
                     Icons.filter_list,
                     color: kWhiteColor,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Filter(callBack: getAllRequest, filterType: FilterType.AllRequest)));
+                  },
                 )
               ],
             ),
