@@ -1,17 +1,21 @@
 class ProfileModel {
   int totalDonate;
-  int totalRequest;
   int totalLove;
+  int totalRequest;
   UserAllData userData;
   List<Activities> activities;
 
   ProfileModel(
-      {this.totalDonate, this.totalRequest, this.userData, this.activities});
+      {this.totalDonate,
+        this.totalLove,
+        this.totalRequest,
+        this.userData,
+        this.activities});
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
     totalDonate = json['totalDonate'];
-    totalRequest = json['totalRequest'];
     totalLove = json['totalLove'];
+    totalRequest = json['totalRequest'];
     userData = json['userData'] != null
         ? new UserAllData.fromJson(json['userData'])
         : null;
@@ -26,6 +30,7 @@ class ProfileModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['totalDonate'] = this.totalDonate;
+    data['totalLove'] = this.totalLove;
     data['totalRequest'] = this.totalRequest;
     if (this.userData != null) {
       data['userData'] = this.userData.toJson();
@@ -46,13 +51,13 @@ class UserAllData {
   String address;
   String bloodGroup;
   int socialLogin;
-  String socialId;
-  String image;
+  Null socialId;
+  Null image;
   int contactVisiable;
   int donorMode;
   String zipCode;
   String division;
-  String lastDonation;
+  Null lastDonation;
 
   UserAllData(
       {this.id,
@@ -111,6 +116,32 @@ class UserAllData {
 }
 
 class Activities {
+  int reacts;
+  int state;
+  Activity activity;
+
+  Activities({this.reacts, this.state, this.activity});
+
+  Activities.fromJson(Map<String, dynamic> json) {
+    reacts = json['reacts'];
+    state = json['state'];
+    activity = json['activity'] != null
+        ? new Activity.fromJson(json['activity'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['reacts'] = this.reacts;
+    data['state'] = this.state;
+    if (this.activity != null) {
+      data['activity'] = this.activity.toJson();
+    }
+    return data;
+  }
+}
+
+class Activity {
   int id;
   String address;
   String image;
@@ -118,7 +149,7 @@ class Activities {
   int userId;
   String description;
 
-  Activities(
+  Activity(
       {this.id,
         this.address,
         this.image,
@@ -126,7 +157,7 @@ class Activities {
         this.userId,
         this.description});
 
-  Activities.fromJson(Map<String, dynamic> json) {
+  Activity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     address = json['address'];
     image = json['image'];
