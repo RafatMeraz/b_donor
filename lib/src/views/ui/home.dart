@@ -9,6 +9,7 @@ import 'package:organize_flutter_project/src/business_logic/services/repository.
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/all_requests.dart';
 import 'package:organize_flutter_project/src/views/ui/diet_chart.dart';
+import 'package:organize_flutter_project/src/views/ui/exercises.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
 import 'package:organize_flutter_project/src/views/ui/login_register.dart';
 import 'package:organize_flutter_project/src/views/ui/post_activity.dart';
@@ -224,7 +225,9 @@ class _HomeState extends State<Home> {
               leading:
                   Icon(Icons.fitness_center, color: kPurpleColor, size: 20),
               title: Text('Exercise Guidelines'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Exercises()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.fastfood, color: kPurpleColor, size: 20),
