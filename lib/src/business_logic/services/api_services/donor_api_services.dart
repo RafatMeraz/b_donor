@@ -11,7 +11,23 @@ class DonorAPIServices {
   // check into api that email is already registered or not
   Future<ResponseObject> getAllDonor() async {
     try {
-      var _response = await _client.get(BASE_URL + 'getAllDonor');
+      var _response;
+      if (AllDonorFilter.bloodGroup != null && AllDonorFilter.division != null){
+        _response = await _client.post(BASE_URL + 'getAllDonor', body : {
+          'blood_group' : AllDonorFilter.bloodGroup,
+          'division' : AllDonorFilter.division,
+        });
+      } else if (AllDonorFilter.bloodGroup != null){
+        _response = await _client.post(BASE_URL + 'getAllDonor', body : {
+          'blood_group' : AllDonorFilter.bloodGroup,
+        });
+      } else if (AllDonorFilter.division != null) {
+        _response = await _client.post(BASE_URL + 'getAllDonor', body : {
+          'division' : AllDonorFilter.division,
+        });
+      } else {
+        _response = await _client.post(BASE_URL + 'getAllDonor');
+      }
       print(jsonDecode(_response.body));
       if (_response.statusCode == 200) {
         var decodedResponse = jsonDecode(_response.body);

@@ -21,3 +21,11 @@ enum EmailExistCheck {
   LoginCheck,
   ExistsCheck
 }
+
+class AllDonorFilter {
+  static String bloodGroup, division;
+}
+
+class AllRequestFilter {
+  static String bloodGroup, division;
+}

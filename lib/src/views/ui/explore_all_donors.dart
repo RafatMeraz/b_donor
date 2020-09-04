@@ -3,6 +3,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/models/donor_model.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/ui/filter.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
@@ -162,7 +163,9 @@ class _ExploreAllDonorsState extends State<ExploreAllDonors> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.filter_list, color: kPurpleColor, size: 24),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Filter(filterType: FilterType.AllDonor, callBack: getAllDonors)));
+            },
           )
         ],
       ),
