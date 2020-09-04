@@ -7,8 +7,10 @@ import 'package:organize_flutter_project/src/business_logic/models/notification_
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/ui/about_us.dart';
 import 'package:organize_flutter_project/src/views/ui/all_requests.dart';
 import 'package:organize_flutter_project/src/views/ui/diet_chart.dart';
+import 'package:organize_flutter_project/src/views/ui/emergency_help.dart';
 import 'package:organize_flutter_project/src/views/ui/exercises.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
 import 'package:organize_flutter_project/src/views/ui/login_register.dart';
@@ -241,12 +243,18 @@ class _HomeState extends State<Home> {
             ListTile(
               leading: Icon(Icons.phone_in_talk, color: kPurpleColor, size: 20),
               title: Text('Emergency Help'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EmergencyHelp()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.live_help, color: kPurpleColor, size: 20),
               title: Text('About'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AboutUs()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app, color: kPurpleColor, size: 20),
