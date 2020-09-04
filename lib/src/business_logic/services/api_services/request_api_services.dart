@@ -33,4 +33,37 @@ class RequestAPIServices {
     }
   }
 
+  // create a new request api
+  Future<ResponseObject> createNewRequest(String address, String bloodFor, String bloodType, int units, String bloodGroup, String contact, String division) async {
+    try {
+      var _response = await _client.post(BASE_URL + 'createNewRequest', body: {
+        'user_id' : UserData.userId.toString(),
+        'address' : address,
+        'blood_for' : bloodFor,
+        'blood_type' : bloodType,
+        'units' : units.toString(),
+        'blood_group' : bloodGroup,
+        'contact' : contact,
+        'division' : division,
+      });
+      print(jsonDecode(_response.body));
+      if (_response.statusCode == 200) {
+        final decodedResponse = jsonDecode(_response.body);
+        print(decodedResponse);
+        if (decodedResponse['error'] == false){
+          return ResponseObject(
+              id: ResponseCode.SUCCESSFUL, object: 'Request added!');
+        } else {
+          return ResponseObject(
+              id: ResponseCode.FAILED, object: 'Request add failed! Try again.');
+        }
+      } else {
+        return ResponseObject(
+            id: ResponseCode.FAILED,
+            object: 'Status code for request ${_response.statusCode}');
+      }
+    } catch (e) {
+      return ResponseObject(id: ResponseCode.FAILED, object: e.toString());
+    }
+  }
 }

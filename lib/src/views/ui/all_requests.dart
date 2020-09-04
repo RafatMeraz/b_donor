@@ -184,7 +184,7 @@ class _AllRequestsState extends State<AllRequests> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              AddNewRequest()));
+                                              AddNewRequest(getAllRequest)));
                                 },
                                 backgroundColor: kWhiteColor,
                                 text: 'ADD REQUEST',
