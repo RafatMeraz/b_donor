@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:group_button/group_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class AddNewRequest extends StatefulWidget {
   AddNewRequest(this.getAllRequest);
@@ -19,9 +21,11 @@ class _AddNewRequestState extends State<AddNewRequest> {
   String _bloodType = 'Blood';
   final bloodGroups = ["A+", "A-", "B-", "B+", "O+", "O-", "AB-", "AB+"];
   bool inProgress = false;
-
+  final homeScaffoldKey = GlobalKey<ScaffoldState>();
+  final searchScaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _addressController, _bloodForController,
       _amountController, _contactNumberController;
+  double _latitude, _longitude;
 
   @override
   void initState() {
@@ -113,11 +117,41 @@ class _AddNewRequestState extends State<AddNewRequest> {
                         fontWeight: FontWeight.bold,
                         color: kBlackColor)),
                 SizedBox(height: 10),
-                RoundedTextField(
+                TextField(
+                  onTap: _handlePressButton,
                   controller: _addressController,
-                  hint: 'Address',
-                  textInputType: TextInputType.text,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: kBlackColor,
+                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w500),
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    fillColor: kGreyColor,
+                    contentPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: 'Address',
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                 ),
+                SizedBox(height: 30),
+                Text('Division',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: kBlackColor)),
                 SizedBox(height: 10),
                 Container(
                   decoration: BoxDecoration(
@@ -352,4 +386,35 @@ class _AddNewRequestState extends State<AddNewRequest> {
       ),
     );
   }
+
+  // get places data
+  Future<void> _handlePressButton() async {
+
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    Prediction p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: GOOGLE_MAP_KEY,
+      onError: (value) => print(value.errorMessage),
+      mode: Mode.overlay,
+      language: "en",
+      components: [Component(Component.country, "bd")],
+    );
+    _addressController.text = p.description;
+    _getLatLng(p);
+  }
+
+  void _getLatLng(Prediction prediction) async {
+    GoogleMapsPlaces _places = new
+    GoogleMapsPlaces(apiKey: GOOGLE_MAP_KEY);  //Same API_KEY as above
+    PlacesDetailsResponse detail =
+    await _places.getDetailsByPlaceId(prediction.placeId);
+    _latitude = detail.result.geometry.location.lat;
+    _longitude = detail.result.geometry.location.lng;
+    String address = prediction.description;
+    print(_latitude);
+    print(_longitude);
+    print(address);
+  }
+
 }

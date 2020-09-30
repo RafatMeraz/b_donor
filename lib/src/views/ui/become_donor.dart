@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:group_button/group_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
@@ -312,21 +311,6 @@ class _BecomeDonorState extends State<BecomeDonor> {
         ));
   }
 
-  Future<void> _handlePressButton() async {
-
-    // show input autocomplete with selected mode
-    // then get the Prediction selected
-    Prediction p = await PlacesAutocomplete.show(
-      context: context,
-      apiKey: 'AIzaSyCI670R0dILrIKJNaL7qu2di_XSYw0hI-4',
-      onError: (value) => print(value.errorMessage),
-      mode: Mode.overlay,
-      language: "en",
-      components: [Component(Component.country, "bd")],
-    );
-
-    displayPrediction(p, homeScaffoldKey.currentState);
-  }
   Future<Null> displayPrediction(Prediction p, ScaffoldState scaffold) async {
     if (p != null) {
       // get detail (lat/lng)

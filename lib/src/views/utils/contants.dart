@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 const IMG_BASE_URL = 'http://bdonorapi.aapbd.com/';
+const GOOGLE_MAP_KEY = "AIzaSyCxuo3YR2wuXgT4maohLxkTp1QFEuTLz1Q";
 
 const Color kPurpleColor = Color(0xFFFF217A);
 const Color kDarkPurpleColor = Color(0xFFFF4D4D);
