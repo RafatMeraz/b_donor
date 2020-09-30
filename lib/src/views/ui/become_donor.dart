@@ -8,6 +8,8 @@ import 'package:organize_flutter_project/src/views/ui/home.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+
 
 class BecomeDonor extends StatefulWidget {
   @override
@@ -21,7 +23,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
   TextEditingController _nameController, _emailController, _addressController, _zipController;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final searchScaffoldKey = GlobalKey<ScaffoldState>();
-  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: 'AIzaSyCI670R0dILrIKJNaL7qu2di_XSYw0hI-4');
+  double _latitude, _longitude;
 
   @override
   void initState() {
@@ -100,6 +102,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
                   ),
                   TextField(
                     controller: _addressController,
+                    onTap: _handlePressButton,
                     style: TextStyle(
                         fontSize: 14,
                         color: kBlackColor,
@@ -311,19 +314,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
         ));
   }
 
-  Future<Null> displayPrediction(Prediction p, ScaffoldState scaffold) async {
-    if (p != null) {
-      // get detail (lat/lng)
-      PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
-      final lat = detail.result.geometry.location.lat;
-      final lng = detail.result.geometry.location.lng;
-
-      scaffold.showSnackBar(
-        SnackBar(content: Text("${p.description} - $lat/$lng")),
-      );
-    }
-  }
-
+  // register new user data
   void registerUser() async{
     var _response = await repository.register();
     if (_response.id == ResponseCode.SUCCESSFUL) {
@@ -336,6 +327,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
     }
   }
 
+  // check email is exists or not
   checkEmailExists() async{
     setState(() {
       inProgress = true;
@@ -357,5 +349,37 @@ class _BecomeDonorState extends State<BecomeDonor> {
       showErrorToast(_response.object);
     }
   }
+
+  // get places data
+  Future<void> _handlePressButton() async {
+
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    Prediction p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: GOOGLE_MAP_KEY,
+      onError: (value) => print(value.errorMessage),
+      mode: Mode.overlay,
+      language: "en",
+      components: [Component(Component.country, "bd")],
+    );
+    _addressController.text = p.description;
+    _getLatLng(p);
+  }
+
+  // get lat long of the selected address from google place api
+  void _getLatLng(Prediction prediction) async {
+    GoogleMapsPlaces _places = new
+    GoogleMapsPlaces(apiKey: GOOGLE_MAP_KEY);  //Same API_KEY as above
+    PlacesDetailsResponse detail =
+    await _places.getDetailsByPlaceId(prediction.placeId);
+    _latitude = detail.result.geometry.location.lat;
+    _longitude = detail.result.geometry.location.lng;
+    String address = prediction.description;
+    print(_latitude);
+    print(_longitude);
+    print(address);
+  }
+
 }
 

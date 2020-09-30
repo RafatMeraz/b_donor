@@ -8,6 +8,8 @@ import 'package:organize_flutter_project/src/business_logic/services/repository.
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class PostActivity extends StatefulWidget {
   PostActivity({@required this.getHomeData});
@@ -21,6 +23,7 @@ class _PostActivityState extends State<PostActivity> {
   File _imageFile;
   final picker = ImagePicker();
   bool inProgress = false;
+  double _latitude, _longitude;
 
   @override
   void initState() {
@@ -139,10 +142,34 @@ class _PostActivityState extends State<PostActivity> {
                 SizedBox(height: 20),
                 Text('Address Preference', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kBlackColor)),
                 SizedBox(height: 10),
-                RoundedTextField(
+                TextField(
+                  onTap: _handlePressButton,
                   controller: _addressController,
-                  hint: 'Address',
-                  textInputType: TextInputType.text,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: kBlackColor,
+                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w500),
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    fillColor: kGreyColor,
+                    contentPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: 'Address',
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 30),
                 Text('Select Image', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kBlackColor)),
@@ -235,4 +262,36 @@ class _PostActivityState extends State<PostActivity> {
       ),
     );
   }
+
+  // get places data
+  Future<void> _handlePressButton() async {
+
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    Prediction p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: GOOGLE_MAP_KEY,
+      onError: (value) => print(value.errorMessage),
+      mode: Mode.overlay,
+      language: "en",
+      components: [Component(Component.country, "bd")],
+    );
+    _addressController.text = p.description;
+    _getLatLng(p);
+  }
+
+  // get lat long of the selected address from google place api
+  void _getLatLng(Prediction prediction) async {
+    GoogleMapsPlaces _places = new
+    GoogleMapsPlaces(apiKey: GOOGLE_MAP_KEY);  //Same API_KEY as above
+    PlacesDetailsResponse detail =
+    await _places.getDetailsByPlaceId(prediction.placeId);
+    _latitude = detail.result.geometry.location.lat;
+    _longitude = detail.result.geometry.location.lng;
+    String address = prediction.description;
+    print(_latitude);
+    print(_longitude);
+    print(address);
+  }
+
 }

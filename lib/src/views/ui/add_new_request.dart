@@ -404,6 +404,7 @@ class _AddNewRequestState extends State<AddNewRequest> {
     _getLatLng(p);
   }
 
+  // get lat long of the selected address from google place api
   void _getLatLng(Prediction prediction) async {
     GoogleMapsPlaces _places = new
     GoogleMapsPlaces(apiKey: GOOGLE_MAP_KEY);  //Same API_KEY as above
