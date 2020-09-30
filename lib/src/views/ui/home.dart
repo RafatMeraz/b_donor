@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/models/home_model.dart';
-import 'package:organize_flutter_project/src/business_logic/models/notification_model.dart';
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
@@ -14,6 +13,7 @@ import 'package:organize_flutter_project/src/views/ui/emergency_help.dart';
 import 'package:organize_flutter_project/src/views/ui/exercises.dart';
 import 'package:organize_flutter_project/src/views/ui/explore_all_donors.dart';
 import 'package:organize_flutter_project/src/views/ui/login_register.dart';
+import 'package:organize_flutter_project/src/views/ui/notifications.dart';
 import 'package:organize_flutter_project/src/views/ui/post_activity.dart';
 import 'package:organize_flutter_project/src/views/ui/profile.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
@@ -29,8 +29,6 @@ class _HomeState extends State<Home> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeModel _homeModel;
   List<Column> cards = List();
-  List<NotificationCard> notificationsList = List();
-  NotificationModel _notificationModel;
 
   @override
   void initState() {
@@ -75,57 +73,6 @@ class _HomeState extends State<Home> {
     } else {
       setState(() {
         inProgress = false;
-      });
-      showErrorToast(_response.object);
-    }
-  }
-
-  // get all home data from api
-  getAllNotifications() async {
-    setState(() {
-      isVisible = true;
-    });
-    var _response = await repository.getAllNotifications();
-    if (_response.id == ResponseCode.SUCCESSFUL) {
-      _notificationModel = _response.object;
-      notificationsList.clear();
-      _notificationModel.requests.forEach((element) {
-        notificationsList.add(NotificationCard(
-            id: element.request.id,
-            gender: element.user.gender,
-            message: element.request.message,
-            name: element.user.name,
-            time: element.request.time,
-            image: element.user.image,
-            ignoreFunction: responseToNotification,
-            responseFunction: responseToNotification));
-      });
-      setState(() {
-        isVisible = false;
-      });
-    } else {
-      setState(() {
-        isVisible = false;
-      });
-      showErrorToast(_response.object);
-    }
-  }
-
-  // get all home data from api
-  responseToNotification(int requestId, int response) async {
-    setState(() {
-      isVisible = true;
-    });
-    var _response = await repository.responsePersonalNotifications(requestId, response);
-    if (_response.id == ResponseCode.SUCCESSFUL) {
-      setState(() {
-        isVisible = false;
-      });
-      Navigator.of(context).pop();
-      getAllHomeData();
-    } else {
-      setState(() {
-        isVisible = false;
       });
       showErrorToast(_response.object);
     }
@@ -229,7 +176,8 @@ class _HomeState extends State<Home> {
                   Icon(Icons.fitness_center, color: kPurpleColor, size: 20),
               title: Text('Exercise Guidelines'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Exercises()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Exercises()));
               },
             ),
             ListTile(
@@ -268,6 +216,7 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+      endDrawer: NotificationScreen(refreshHome: getAllHomeData),
       appBar: PreferredSize(
         preferredSize: Size(MediaQuery.of(context).size.width, 60),
         child: Container(
@@ -280,11 +229,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 InkWell(
                     onTap: () {
-                      if (_scaffoldKey.currentState.isDrawerOpen)
-                        _scaffoldKey.currentState.openEndDrawer();
-                      else {
-                        _scaffoldKey.currentState.openDrawer();
-                      }
+                      _scaffoldKey.currentState.openDrawer();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -299,38 +244,25 @@ class _HomeState extends State<Home> {
                       color: Colors.white),
                 ),
                 IconButton(
-                  icon: Badge(
-                    badgeContent: Text(
-                      _homeModel == null
-                          ? ''
-                          : _homeModel.totalNotifications.toString(),
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: kWhiteColor,
-                          fontWeight: FontWeight.bold),
+                    icon: Badge(
+                      badgeContent: Text(
+                        _homeModel == null
+                            ? ''
+                            : _homeModel.totalNotifications.toString(),
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: kWhiteColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      badgeColor: Colors.amber,
+                      child: Icon(
+                        Icons.notifications,
+                        color: kWhiteColor,
+                      ),
                     ),
-                    badgeColor: Colors.amber,
-                    child: Icon(
-                      Icons.notifications,
-                      color: kWhiteColor,
-                    ),
-                  ),
-                  onPressed: () async{
-                    await getAllNotifications();
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext bc) {
-                          return _notificationModel == null
-                              ? Visibility(
-                                  visible: isVisible,
-                                  child: Center(
-                                      child: CircularProgressIndicator()))
-                              : _notificationModel.requests.length == 0 ? Center(child: Text('No new notifications!')) : Column(
-                            children: notificationsList,
-                          );
-                        });
-                  },
-                )
+                    onPressed: () async {
+                      _scaffoldKey.currentState.openEndDrawer();
+                    })
               ],
             ),
           ),
@@ -343,7 +275,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           getAllHomeData();
         },
         child: ModalProgressHUD(
@@ -479,7 +411,8 @@ class _HomeState extends State<Home> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PostActivity(getHomeData: getAllHomeData)));
+                                  builder: (context) => PostActivity(
+                                      getHomeData: getAllHomeData)));
                         },
                         child: Row(
                           children: <Widget>[
