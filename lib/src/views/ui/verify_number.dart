@@ -28,11 +28,6 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
   void initState() {
     super.initState();
     _phoneNumberController = TextEditingController();
-    initilialize();
-  }
-
-  initilialize() async {
-    defaultApp = await Firebase.initializeApp();
   }
 
   Future<void> _submitPhoneNumber() async {
@@ -161,7 +156,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
     FirebaseAuth.instance
         .signInWithCredential(_phoneAuthCredential)
         .then((value) {
-          checkPhoneExists();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     }).catchError((onError){
       setState(() {
         inProgress = false;
@@ -170,25 +165,25 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
     });
   }
 
-  checkPhoneExists() async{
-    var _response = await repository.checkPhoneExists('+8801'+_phoneNumberController.text);
-    if (_response.id == ResponseCode.SUCCESSFUL) {
-      setState(() {
-        inProgress = false;
-      });
-      if (_response.object == 'not exists'){
-        RegisterUserData.phone = '+8801'+_phoneNumberController.text;
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
-      } else {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()), (route) => false);
-      }
-    } else {
-      setState(() {
-        inProgress = false;
-      });
-      showErrorToast(_response.object);
-    }
-  }
+  // checkPhoneExists() async{
+  //   var _response = await repository.checkPhoneExists('+8801'+_phoneNumberController.text);
+  //   if (_response.id == ResponseCode.SUCCESSFUL) {
+  //     setState(() {
+  //       inProgress = false;
+  //     });
+  //     if (_response.object == 'not exists'){
+  //       RegisterUserData.phone = '+8801'+_phoneNumberController.text;
+  //       Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
+  //     } else {
+  //       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()), (route) => false);
+  //     }
+  //   } else {
+  //     setState(() {
+  //       inProgress = false;
+  //     });
+  //     showErrorToast(_response.object);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
