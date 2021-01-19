@@ -334,20 +334,29 @@ class ActivityCard extends StatelessWidget {
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
                                 color: kBorderGreyColor)),
-                        SizedBox(width: 15),
-                        Icon(
-                          Icons.location_on,
-                          color: kBorderGreyColor,
-                          size: 16,
-                        ),
-                        SizedBox(width: 5),
-                        Text('$location',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                                color: kBorderGreyColor)),
                       ],
                     ),
+                    SizedBox(height: 5),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Icon(
+                        Icons.location_on,
+                        color: kBorderGreyColor,
+                        size: 16,
+                      ),
+                        SizedBox(width: 5),
+                        Container(
+                          width: 250,
+                          child: Text('$location',
+                              maxLines: 3,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                  color: kBorderGreyColor)),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ],

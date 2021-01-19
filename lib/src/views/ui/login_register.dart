@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
@@ -108,7 +110,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                 ),
                 InkWell(
                   onTap: (){
-//                  fbLogin();
+                 _login();
 //                    Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
                   },
                   child: Container(
@@ -222,5 +224,28 @@ class _LoginRegisterState extends State<LoginRegister> {
         ),
       ),
     );
+  }
+  Future<void> _login() async {
+    try {
+      // by default the login method has the next permissions ['email','public_profile']
+      AccessToken accessToken = await FacebookAuth.instance.login();
+      print(accessToken.toJson());
+      // get the user data
+      final userData = await FacebookAuth.instance.getUserData();
+      print(userData);
+    } on FacebookAuthException catch (e) {
+      print(e.message);
+      switch (e.errorCode) {
+        case FacebookAuthErrorCode.OPERATION_IN_PROGRESS:
+          print("You have a previous login operation in progress");
+          break;
+        case FacebookAuthErrorCode.CANCELLED:
+          print("login cancelled");
+          break;
+        case FacebookAuthErrorCode.FAILED:
+          print("login failed");
+          break;
+      }
+    }
   }
 }
