@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
+import 'package:organize_flutter_project/src/views/ui/home.dart';
+import 'package:organize_flutter_project/src/views/ui/login_register.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -36,36 +39,25 @@ Future<bool> signInWithGoogle() async {
   return true;
 }
 
-//Future<bool> signInWithFacebook() async {
-//  final facebookLogin = FacebookLogin();
-//  try {
-//    final result = await facebookLogin.logInWithReadPermissions(['email']);
-//    if (result.accessToken != null){
-//      var firebaseUser = await firebaseAuthWithFacebook(
-//          token: result.accessToken);
-//      if (firebaseUser != null){
-//        RegistrationData.socialId = firebaseUser.uid;
-//        RegistrationData.socialLogin = '1';
-//        if (firebaseUser.email != null){
-//          RegistrationData.email = firebaseUser.email;
-//        }
-//        return true;
-//      } else {
-//        showErrorToast('Face Auth failed! Try again.');
-//      }
-//    } else {
-//      showErrorToast(result.errorMessage.toString());
-//      return false;
-//    }
-//  } catch (error){
-//    showErrorToast(error.toString());
-//    return false;
-//  }
-//  return false;
-//}
-//
-//Future<FirebaseUser> firebaseAuthWithFacebook({@required FacebookAccessToken token}) async {
-//  AuthCredential credential= FacebookAuthProvider.getCredential(accessToken: token.token);
-//  final AuthResult _authResult = await _authInstance.signInWithCredential(credential);
-//  return _authResult.user;
-//}
+class FirebaseAuthService {
+  static String errorMessage;
+  static bool userSignIn = false;
+  static User userData;
+
+  // check user is logged on or not
+  static checkUserAuthState() {
+    return StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasData) {
+            return Home();
+          } else {
+            return LoginRegister();
+          }
+        });
+  }
+
+  static logout() {
+    _auth.signOut();
+  }
+}

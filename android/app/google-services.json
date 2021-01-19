@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "699277990292-5g5s0bp54b0dapqgqh2ncjshtht155r5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pirox.organize_flutter_project",
+            "certificate_hash": "dc327522db53d4305604009f3049d29a137035c6"
+          }
+        },
+        {
+          "client_id": "699277990292-itmtlpi3pnpkbe76qrimtveqaeno0ugu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pirox.organize_flutter_project",
+            "certificate_hash": "ccfdf09c1b3a32a340604ad01052df1dde5fc69f"
+          }
+        },
+        {
           "client_id": "699277990292-8lnhi962ctjd8pkncrp62repfk65giv8.apps.googleusercontent.com",
           "client_type": 3
         }

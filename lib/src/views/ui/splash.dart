@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/home.dart';
@@ -19,10 +20,8 @@ class _SplashState extends State<Splash> {
     super.initState();
     Timer(
         Duration(seconds: 3),
-        () async => await isFirstValue() ?  Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => IntroScreen())) : await isLoggedIn() ?  Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => Home())) : Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoginRegister()))
+        () =>  Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => FirebaseAuthService.checkUserAuthState()))
     );
   }
 

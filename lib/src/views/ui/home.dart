@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/models/home_model.dart';
+import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
@@ -208,7 +209,7 @@ class _HomeState extends State<Home> {
               leading: Icon(Icons.exit_to_app, color: kPurpleColor, size: 20),
               title: Text('Log out'),
               onTap: () {
-                HiveServices.logOut();
+                FirebaseAuthService.logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => LoginRegister()));
               },
