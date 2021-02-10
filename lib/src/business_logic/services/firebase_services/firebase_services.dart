@@ -61,19 +61,17 @@ class FirebaseServices {
   }
 
   static Future<bool> checkDocExist(String docID) async {
-    bool exists = false;
     try {
-      await fireStoreInstance.doc("users/$docID").get().then((doc) {
-        if (doc.exists)
-          exists = true;
-        else
-          exists = false;
-      });
-      return exists;
+      final doc = await fireStoreInstance.collection('users').doc(docID).get();
+      if (doc.exists)
+        return true;
+      else
+        return false;
     } catch (e) {
       return false;
     }
   }
+
   static Future<bool> registerNewUserData(String name, String zip, String address, String uid, String bloodGroup, String division, String gender, bool contactVisible) async {
     try {
       await fireStoreInstance.collection('users').doc(uid).set({

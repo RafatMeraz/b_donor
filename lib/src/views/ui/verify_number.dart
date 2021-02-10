@@ -158,6 +158,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
         .then((value) async {
           UserData.userId = value.user.uid;
           final _result = await FirebaseServices.checkDocExist(value.user.uid);
+          print(_result);
           if (_result) {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
           } else {
@@ -326,7 +327,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
         onCompleted: (v) {
           print("Completed");
           //otp = v;
-          //_verifyOtp();
+          // _verifyOtp();
         },
         onChanged: (value) {
           print(value);
