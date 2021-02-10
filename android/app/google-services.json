@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "699277990292-15fhp8uackvgr03263q9349mpi8t586l.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pirox.organize_flutter_project",
-            "certificate_hash": "76d3b17abd8f9a920b0bed99d96e304cd7b7f5e1"
-          }
-        },
-        {
           "client_id": "699277990292-5g5s0bp54b0dapqgqh2ncjshtht155r5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

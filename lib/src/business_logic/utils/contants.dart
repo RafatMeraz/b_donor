@@ -9,7 +9,7 @@ class UpdateUserData {
 }
 
 class UserData {
-  static int userId;
+  static String userId;
   static String phone, name, email;
 }
 

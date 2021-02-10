@@ -21,7 +21,7 @@ class _SplashState extends State<Splash> {
     Timer(
         Duration(seconds: 3),
         () =>  Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => FirebaseAuthService.checkUserAuthState()))
+            MaterialPageRoute(builder: (context) => FirebaseServices.checkUserAuthState()))
     );
   }
 

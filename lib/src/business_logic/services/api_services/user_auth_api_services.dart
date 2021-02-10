@@ -29,7 +29,7 @@ class UserAuthAPIServices {
               name: 'name', data: decodedResponse['user'][0]['name'].toString());
           HiveServices.addStringData(
               name: 'phone', data: decodedResponse['user'][0]['phone'].toString());
-          UserData.userId = int.parse(decodedResponse['user'][0]['id'].toString());
+          // UserData.userId = int.parse(decodedResponse['user'][0]['id'].toString());
           UserData.email = decodedResponse['user'][0]['email'].toString();
           UserData.name = decodedResponse['user'][0]['name'].toString();
           UserData.phone = decodedResponse['user'][0]['phone'].toString();
@@ -67,7 +67,7 @@ class UserAuthAPIServices {
                 name: 'name', data: decodedResponse['user'][0]['name'].toString());
             HiveServices.addStringData(
                 name: 'phone', data: decodedResponse['user'][0]['phone'].toString());
-            UserData.userId = int.parse(decodedResponse['user'][0]['id'].toString());
+            // UserData.userId = int.parse(decodedResponse['user'][0]['id'].toString());
             UserData.email = decodedResponse['user'][0]['email'];
             UserData.name = decodedResponse['user'][0]['name'];
             UserData.phone = decodedResponse['user'][0]['phone'];
@@ -127,7 +127,7 @@ class UserAuthAPIServices {
           HiveServices.addStringData(name: 'email', data: RegisterUserData.email);
           HiveServices.addStringData(name: 'name', data: RegisterUserData.name);
           HiveServices.addStringData(name: 'phone', data: RegisterUserData.phone);
-          UserData.userId = int.parse(decodedResponse['id']);
+          // UserData.userId = int.parse(decodedResponse['id']);
           UserData.email = RegisterUserData.email;
           UserData.name = RegisterUserData.name;
           UserData.phone = RegisterUserData.phone;

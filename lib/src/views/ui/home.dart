@@ -209,7 +209,7 @@ class _HomeState extends State<Home> {
               leading: Icon(Icons.exit_to_app, color: kPurpleColor, size: 20),
               title: Text('Log out'),
               onTap: () {
-                FirebaseAuthService.logout();
+                FirebaseServices.logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => LoginRegister()));
               },

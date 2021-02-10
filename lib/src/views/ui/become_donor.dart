@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/home.dart';
@@ -278,21 +279,25 @@ class _BecomeDonorState extends State<BecomeDonor> {
                   ),
                   RoundedGradientColorButton(
                     text: 'DONE',
-                    onTap: () {
+                    onTap: () async {
                       bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_emailController.text.trim());
                       if (_nameController.text.trim().isNotEmpty){
                         if (emailValid){
                           if (_addressController.text.trim().isNotEmpty){
                             if (_zipController.text.trim().isNotEmpty){
-                              RegisterUserData.name = _nameController.text.trim();
-                              RegisterUserData.email = _emailController.text.trim();
-                              RegisterUserData.address = _addressController.text.trim();
-                              RegisterUserData.zipCode = _zipController.text.trim();
-                              RegisterUserData.division = _division;
-                              RegisterUserData.gender = isGenderMale ? 'Male' : 'Female';
-                              RegisterUserData.bloodGroup = _donorBloodGroup;
-                              RegisterUserData.contactVisible = isVisible ? 1.toString() : 0.toString();
-                              checkEmailExists();
+                              // RegisterUserData.name = _nameController.text.trim();
+                              // RegisterUserData.email = _emailController.text.trim();
+                              // RegisterUserData.address = _addressController.text.trim();
+                              // RegisterUserData.zipCode = _zipController.text.trim();
+                              // RegisterUserData.division = _division;
+                              // RegisterUserData.gender = isGenderMale ? 'Male' : 'Female';
+                              // RegisterUserData.bloodGroup = _donorBloodGroup;
+                              // RegisterUserData.contactVisible = isVisible ? 1.toString() : 0.toString();
+                              // checkEmailExists();
+                              final _result = await FirebaseServices.registerNewUserData(_nameController.text.trim(), RegisterUserData.email, _zipController.text.trim(), _addressController.text, UserData.userId.toString(), _donorBloodGroup, _division);
+                              if (_result) {
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()), (route) => false);
+                              }
                             } else {
                               showErrorToast('Enter zip code!');
                             }
