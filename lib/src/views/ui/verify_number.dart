@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:organize_flutter_project/src/business_logic/services/repository.dart';
+import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/ui/become_donor.dart';
 import 'package:organize_flutter_project/src/views/ui/home.dart';
@@ -155,8 +155,14 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
     });
     FirebaseAuth.instance
         .signInWithCredential(_phoneAuthCredential)
-        .then((value) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+        .then((value) async {
+          UserData.userId = value.user.uid;
+          final _result = await FirebaseServices.checkDocExist(value.user.uid);
+          if (_result) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+          } else {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
+          }
     }).catchError((onError){
       setState(() {
         inProgress = false;
@@ -165,25 +171,6 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
     });
   }
 
-  // checkPhoneExists() async{
-  //   var _response = await repository.checkPhoneExists('+8801'+_phoneNumberController.text);
-  //   if (_response.id == ResponseCode.SUCCESSFUL) {
-  //     setState(() {
-  //       inProgress = false;
-  //     });
-  //     if (_response.object == 'not exists'){
-  //       RegisterUserData.phone = '+8801'+_phoneNumberController.text;
-  //       Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));
-  //     } else {
-  //       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()), (route) => false);
-  //     }
-  //   } else {
-  //     setState(() {
-  //       inProgress = false;
-  //     });
-  //     showErrorToast(_response.object);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

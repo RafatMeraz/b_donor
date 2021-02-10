@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/services/hive_services/hive_services.dart';
-import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
-import 'package:organize_flutter_project/src/views/ui/home.dart';
 import 'package:organize_flutter_project/src/views/ui/intro_screen.dart';
-import 'package:organize_flutter_project/src/views/ui/login_register.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 
 class Splash extends StatefulWidget {
@@ -20,7 +17,8 @@ class _SplashState extends State<Splash> {
     super.initState();
     Timer(
         Duration(seconds: 3),
-        () =>  Navigator.of(context).pushReplacement(
+        () async  =>  await isFirstValue() ? Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => IntroScreen())) : Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => FirebaseServices.checkUserAuthState()))
     );
   }
@@ -75,19 +73,6 @@ class _SplashState extends State<Splash> {
       return true;
     } else {
       return false;
-    }
-  }
-  Future<bool> isLoggedIn() async{
-    var userId = HiveServices.getData(name: 'id');
-    if (userId == null){
-      return false;
-    } else {
-      UserData.userId = userId;
-      UserData.phone = HiveServices.getData(name: 'name');
-      UserData.email = HiveServices.getData(name: 'email');
-      UserData.phone = HiveServices.getData(name: 'phone');
-      print(userId);
-      return true;
     }
   }
 }

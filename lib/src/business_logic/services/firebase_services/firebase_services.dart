@@ -74,21 +74,28 @@ class FirebaseServices {
       return false;
     }
   }
-  static Future<bool> registerNewUserData(String name, String email, String zip, String address, String uid, String bloodGroup, String division) async {
+  static Future<bool> registerNewUserData(String name, String zip, String address, String uid, String bloodGroup, String division, String gender, bool contactVisible) async {
     try {
       await fireStoreInstance.collection('users').doc(uid).set({
         'name': name,
-        'email': email,
         'zip': zip,
         'address': address,
         'blood_group': bloodGroup,
         'division': division,
+        'gender': gender,
+        'contact_visible': contactVisible,
+        'donor_mode': false
       });
       return true;
     } catch (e) {
       print(e);
       return false;
     }
+  }
+
+  static getUserData(String uid) async {
+    final _doc = await fireStoreInstance.collection('users').doc(uid).get();
+    return _doc;
   }
 
   static logout() {
