@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
@@ -46,6 +49,7 @@ class FirebaseServices {
   static bool userSignIn = false;
   static User userData;
   static final fireStoreInstance = FirebaseFirestore.instance;
+  static FirebaseStorage _storage = FirebaseStorage.instance;
 
   // check user is logged on or not
   static checkUserAuthState() {
@@ -84,6 +88,33 @@ class FirebaseServices {
         'gender': gender,
         'contact_visible': contactVisible,
         'donor_mode': false
+      });
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  static Future<bool> postNewActivity(String address, String uid, String description, File file) async {
+    try {
+      var urlOfImage;
+      if (file != null) {
+        StorageReference reference = _storage.ref().child("posts/");
+        StorageUploadTask uploadTask = reference.child(file.absolute.path.split('/').last).putFile(file);
+        StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+        urlOfImage = await taskSnapshot.ref.getDownloadURL();
+      }
+      await fireStoreInstance.collection('users').doc(uid).get().then((doc) async {
+        final name = doc['name'];
+        await fireStoreInstance.collection('posts').doc().set({
+          'name': name,
+          'uid': uid,
+          'image_url': urlOfImage,
+          'address': address,
+          'descriptions': description,
+        });
+        return true;
       });
       return true;
     } catch (e) {
