@@ -110,6 +110,7 @@ class _HomeState extends State<Home> {
       showErrorToast(_response.object);
     }
   }
+  
 
   // change user mode from api
   changeUserMode(int mode) async {
@@ -454,6 +455,36 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(height: 5),
+                // StreamBuilder(
+                //     stream: Firestore.instance.collection("posts").snapshots(),
+                //     builder: (context, snapshot) {
+                //       if (snapshot == null) {
+                //         return Center(
+                //           child: CircularProgressIndicator(),
+                //         );
+                //       } else {
+                //         return new ListView.builder(
+                //             itemCount: snapshot.data.documents.length,
+                //             itemBuilder: (context, index) {
+                //               DocumentSnapshot ds =
+                //                   snapshot.data.documents[index];
+                //               return  ActivityCard(
+                //                 userId: ds['uid'],
+                //                 id: 1,
+                //                 reactionFunction: reactToActivity,
+                //                 gender: 'male',
+                //                 userImage: ds['image_url'],
+                //                 userName: ds['name'],
+                //                 descriptions: ds['description'],
+                //                 image: ds['image_url'],
+                //                 location: ds['address'],
+                //                 reacts: 1,
+                //                 time: '8787',
+                //                 state: ,
+                //               );
+                //             });
+                //       }
+                //     }),
                 _homeModel == null
                     ? Container()
                     : _homeModel.recentActivities.length == 0
