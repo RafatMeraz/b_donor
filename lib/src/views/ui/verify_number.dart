@@ -160,6 +160,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
           final _result = await FirebaseServices.checkDocExist(value.user.uid);
           print(_result);
           if (_result) {
+            UserData.userId = FirebaseAuth.instance.currentUser.uid;
             Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
           } else {
             Navigator.push(context, MaterialPageRoute(builder: (context) => BecomeDonor()));

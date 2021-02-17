@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
@@ -302,6 +303,7 @@ class _BecomeDonorState extends State<BecomeDonor> {
                                 });
                               }
                               if (_result) {
+                                UserData.userId = FirebaseAuth.instance.currentUser.uid;
                                 Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()), (route) => false);
                               }
                             } else {

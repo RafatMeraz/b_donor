@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -173,8 +174,16 @@ class _HomeState extends State<Home> {
                   activeColor: kDarkPurpleColor,
                   trackColor: kSoftBlueColor,
                   value: donorMode,
-                  onChanged: (val) {
-                    changeUserMode(val ? 1 : 0);
+                  onChanged: (val) async {
+                    final result = await FirebaseServices.changeDonorModeStatus(
+                        UserData.userId.toString(), val);
+                    if (result) {
+                      if (mounted) {
+                        setState(() {
+                          donorMode = val;
+                        });
+                      }
+                    }
                   },
                 ),
               ),

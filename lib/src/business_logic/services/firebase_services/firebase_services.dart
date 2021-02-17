@@ -53,6 +53,7 @@ class FirebaseServices {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
+            UserData.userId = FirebaseAuth.instance.currentUser.uid;
             return Home();
           } else {
             return LoginRegister();
@@ -83,6 +84,18 @@ class FirebaseServices {
         'gender': gender,
         'contact_visible': contactVisible,
         'donor_mode': false
+      });
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  static Future<bool> changeDonorModeStatus(String uid, bool donorMode) async {
+    try {
+      await fireStoreInstance.collection('users').doc(uid).update({
+        'donor_mode': donorMode
       });
       return true;
     } catch (e) {
