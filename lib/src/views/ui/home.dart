@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
     super.initState();
     getAllHomeData();
   }
-
+  
   getUserData() async {
     if (mounted) {
       setState(() {
@@ -63,27 +63,27 @@ class _HomeState extends State<Home> {
       _homeModel = _response.object;
       donorMode = _homeModel.donorMode == 1;
       cards.clear();
-      _homeModel.recentActivities.forEach((element) {
-        cards.add(Column(
-          children: <Widget>[
-            ActivityCard(
-              userId: element.user.id,
-              id: element.activity.id,
-              reactionFunction: reactToActivity,
-              gender: element.user.gender,
-              userImage: element.user.image,
-              userName: element.user.name,
-              descriptions: element.activity.description,
-              image: element.activity.image,
-              location: element.activity.address,
-              reacts: element.reacts,
-              time: element.activity.time,
-              state: element.state,
-            ),
-            SizedBox(height: 5),
-          ],
-        ));
-      });
+      // _homeModel.recentActivities.forEach((element) {
+      //   cards.add(Column(
+      //     children: <Widget>[
+      //       ActivityCard(
+      //         userId: element.user.id,
+      //         id: element.activity.id,
+      //         reactionFunction: reactToActivity,
+      //         gender: element.user.gender,
+      //         userImage: element.user.image,
+      //         userName: element.user.name,
+      //         descriptions: element.activity.description,
+      //         image: element.activity.image,
+      //         location: element.activity.address,
+      //         reacts: element.reacts,
+      //         time: element.activity.time,
+      //         state: element.state,
+      //       ),
+      //       SizedBox(height: 5),
+      //     ],
+      //   ));
+      // });
       setState(() {
         inProgress = false;
       });
@@ -318,182 +318,230 @@ class _HomeState extends State<Home> {
               valueColor: AlwaysStoppedAnimation<Color>(kBlackColor),
             ),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 240,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                    const Color(0xFFFF215D),
-                    const Color(0xFFFF4D4D),
-                  ])),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                            color: Colors.white24,
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                      _homeModel == null
-                                          ? '00'
-                                          : _homeModel.totalDonor.toString(),
-                                      style: TextStyle(
-                                          fontSize: 22, color: kWhiteColor)),
-                                  Text('Donors',
-                                      style: TextStyle(
-                                          fontSize: 14, color: kWhiteColor)),
-                                ],
-                              ),
-                              RoundedRaisedButton(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ExploreAllDonors()));
-                                },
-                                backgroundColor: kWhiteColor,
-                                text: 'FIND DONOR',
-                                textColor: kPurpleColor,
-                                imageLink: null,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                            color: Colors.white24,
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                      _homeModel == null
-                                          ? '00'
-                                          : _homeModel.totalRequest.toString(),
-                                      style: TextStyle(
-                                          fontSize: 22, color: kWhiteColor)),
-                                  Text('Request',
-                                      style: TextStyle(
-                                          fontSize: 14, color: kWhiteColor)),
-                                ],
-                              ),
-                              SizedBox(width: 30),
-                              RoundedRaisedButton(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AllRequests()));
-                                },
-                                backgroundColor: kWhiteColor,
-                                text: 'SEE REQUEST',
-                                textColor: kPurpleColor,
-                                imageLink: null,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 5),
-                Container(
-                  color: kWhiteColor,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('EXPLORE LATEST FEED',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: kBlackColor)),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PostActivity(
-                                      getHomeData: getAllHomeData)));
-                        },
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 240,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  const Color(0xFFFF215D),
+                  const Color(0xFFFF4D4D),
+                ])),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Icon(Icons.add_circle_outline, color: kPurpleColor),
-                            Text('Post Update',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: kPurpleColor)),
+                            Column(
+                              children: <Widget>[
+                                StreamBuilder(
+                                  stream: FirebaseFirestore.instance.collection('users').where('donor_mode', isEqualTo: true).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      final List<DocumentSnapshot> documents = snapshot.data.docs;
+                                      return Text(documents.length.toString(),
+                                          style: TextStyle(
+                                              fontSize: 22, color: kWhiteColor));
+                                    } else {
+                                      return Text('00',
+                                          style: TextStyle(
+                                              fontSize: 22, color: kWhiteColor));
+                                    }
+                                  }
+                                ),
+                                Text('Active Donors',
+                                    style: TextStyle(
+                                        fontSize: 14, color: kWhiteColor)),
+                              ],
+                            ),
+                            RoundedRaisedButton(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ExploreAllDonors()));
+                              },
+                              backgroundColor: kWhiteColor,
+                              text: 'FIND DONOR',
+                              textColor: kPurpleColor,
+                              imageLink: null,
+                            )
                           ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 15.0, top: 20.0, bottom: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                StreamBuilder(
+                                    stream: FirebaseFirestore.instance.collection('requests').where('accepted', isEqualTo: false).snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final List<DocumentSnapshot> documents = snapshot.data.docs;
+                                        return Text(documents.length.toString(),
+                                            style: TextStyle(
+                                                fontSize: 22, color: kWhiteColor));
+                                      } else {
+                                        return Text('00',
+                                            style: TextStyle(
+                                                fontSize: 22, color: kWhiteColor));
+                                      }
+                                    }
+                                ),
+                                Text('Request',
+                                    style: TextStyle(
+                                        fontSize: 14, color: kWhiteColor)),
+                              ],
+                            ),
+                            SizedBox(width: 30),
+                            RoundedRaisedButton(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AllRequests()));
+                              },
+                              backgroundColor: kWhiteColor,
+                              text: 'SEE REQUEST',
+                              textColor: kPurpleColor,
+                              imageLink: null,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 5),
-                // StreamBuilder(
-                //     stream: Firestore.instance.collection("posts").snapshots(),
-                //     builder: (context, snapshot) {
-                //       if (snapshot == null) {
-                //         return Center(
-                //           child: CircularProgressIndicator(),
-                //         );
-                //       } else {
-                //         return new ListView.builder(
-                //             itemCount: snapshot.data.documents.length,
-                //             itemBuilder: (context, index) {
-                //               DocumentSnapshot ds =
-                //                   snapshot.data.documents[index];
-                //               return  ActivityCard(
-                //                 userId: ds['uid'],
-                //                 id: 1,
-                //                 reactionFunction: reactToActivity,
-                //                 gender: 'male',
-                //                 userImage: ds['image_url'],
-                //                 userName: ds['name'],
-                //                 descriptions: ds['description'],
-                //                 image: ds['image_url'],
-                //                 location: ds['address'],
-                //                 reacts: 1,
-                //                 time: '8787',
-                //                 state: ,
-                //               );
-                //             });
-                //       }
-                //     }),
-                _homeModel == null
-                    ? Container()
-                    : _homeModel.recentActivities.length == 0
-                        ? Container()
-                        : Column(
-                            children: cards,
-                          ),
-              ],
-            ),
+              ),
+              SizedBox(height: 5),
+              Container(
+                color: kWhiteColor,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('EXPLORE LATEST FEED',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: kBlackColor)),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PostActivity(
+                                    getHomeData: getAllHomeData)));
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.add_circle_outline, color: kPurpleColor),
+                          Text('Post Update',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: kPurpleColor)),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 5),
+              Expanded(child:  StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final List<DocumentSnapshot> documents = snapshot.data.docs;
+                      return ListView(
+                          children: documents
+                              .map((doc) => Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  child: Icon(Icons.person_outline),
+                                  backgroundColor: kGreyColor,
+                                ),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(doc['name'], style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: kBlackColor
+                                    ),),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.location_on_outlined, size: 14,),
+                                        SizedBox(width: 5),
+                                        Expanded(
+                                          child: Text(doc['address'],
+                                            maxLines: 5,
+                                            style: TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            color: kBlackColor,
+                                            fontSize: 12
+                                          ),),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    doc['image_url'] == null ? Container() : Container(
+                                        height: 180,
+                                        width: MediaQuery.of(context).size.width-40,
+                                        child: Image.network(doc['image_url'], fit: BoxFit.fitWidth)),
+                                    SizedBox(height: 10),
+                                    Text(doc['descriptions']),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ))
+                              .toList());
+                    } else if (snapshot.hasError) {
+                      return Text('It\'s Error!');
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  })),
+              // _homeModel == null
+              //     ? Container()
+              //     : _homeModel.recentActivities.length == 0
+              //         ? Container()
+              //         : Column(
+              //             children: cards,
+              //           ),
+            ],
           ),
         ),
       ),
