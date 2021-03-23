@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/models/notification_model.dart';
@@ -5,6 +6,10 @@ import 'package:organize_flutter_project/src/business_logic/services/repository.
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
+
+import '../utils/contants.dart';
+import '../utils/contants.dart';
+import '../utils/contants.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({@required this.refreshHome});
@@ -94,7 +99,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    getAllNotifications();
+    // getAllNotifications();
   }
 
   @override
@@ -102,7 +107,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
         backgroundColor: kWhiteColor,
         appBar: AppBar(
-          elevation: 0,
           backgroundColor: kWhiteColor,
           leading: BackButton(color: kPurpleColor),
           title: Text('Notifications',
@@ -111,23 +115,48 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   fontSize: 18,
                   color: kBlackColor)),
         ),
-        body: ModalProgressHUD(
-          inAsyncCall: inProgress,
-          color: Colors.black87,
-          progressIndicator: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: kPurpleColor,
-            ),
-            padding: EdgeInsets.all(20),
-            child: CircularProgressIndicator(
-              backgroundColor: kWhiteColor,
-              valueColor: AlwaysStoppedAnimation<Color>(kBlackColor),
-            ),
-          ),
-          child: Column(
-            children: notificationsList,
-          ),
-        ));
+        body: StreamBuilder(
+    stream: FirebaseFirestore.instance.collection('requests').where('user-id', isEqualTo: UserData.userId).where('rejected', isEqualTo: false).where('accepted', isEqualTo: false).snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        final List<DocumentSnapshot> documents = snapshot.data.docs;
+        return documents.length == 0 ? Center(child: Text('No new notification right now!'),) : ListView.builder(
+            itemCount: documents.length,
+            itemBuilder: (context, index) {
+          return Column(
+            children: [
+              ListTile(
+                title: Text(documents[index]['message']),
+                subtitle: Text(documents[index]['username']?? 'unknown'),
+                trailing: Wrap(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.close, color: Colors.redAccent,),
+                      onPressed: () {
+                        FirebaseFirestore.instance.collection('requests').doc(documents[index].id).update({
+                          'rejected' : true
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.check, color: Colors.green,),
+                      onPressed: () {
+                        FirebaseFirestore.instance.collection('requests').doc(documents[index].id).update({
+                          'accepted' : true
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Divider(color: Colors.grey, endIndent: 16, indent: 16,)
+            ],
+          );
+        });
+      } else {
+        return Text('Something went wrong!');
+      }
+    }
+    ));
   }
 }

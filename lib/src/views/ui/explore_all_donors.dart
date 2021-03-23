@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/models/donor_model.dart';
@@ -6,6 +7,9 @@ import 'package:organize_flutter_project/src/business_logic/utils/contants.dart'
 import 'package:organize_flutter_project/src/views/ui/filter.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
+
+import '../../business_logic/utils/contants.dart';
+import '../utils/contants.dart';
 
 class ExploreAllDonors extends StatefulWidget {
   @override
@@ -27,7 +31,7 @@ class _ExploreAllDonorsState extends State<ExploreAllDonors> {
   void initState() {
     super.initState();
     _messageController = TextEditingController();
-    getAllDonors();
+    // getAllDonors();
   }
 
   // get all donors from api
@@ -183,21 +187,141 @@ class _ExploreAllDonorsState extends State<ExploreAllDonors> {
             valueColor: AlwaysStoppedAnimation<Color>(kBlackColor),
           ),
         ),
-        child: _donorModel == null
-            ? Center(child: Text('Loading..'))
-            : _donorModel.donors.length == 0
-                ? Center(child: Text('No donor available now!'))
-                : ListView.builder(
-                    itemCount: _donorModel.donors.length,
-                    itemBuilder: (context, index) {
-                      return _donorModel.donors[index].id == UserData.userId
-                          ? Container()
-                          : DonorCard(
-                        requestToDonor: askForHelp,
-                              donor: _donorModel.donors[index],
-                            );
-                    },
-                  ),
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('users').where('donor_mode', isEqualTo: true).snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        final List<DocumentSnapshot> documents = snapshot.data.docs;
+        return documents.length == 0 ? Center(child: Text('No donor available right now!'),) :
+            ListView.builder(
+              itemCount: documents.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    ListTile(
+                      contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                      leading: CircleAvatar(
+                          backgroundColor: kGreyColor,
+                          radius: 50,
+                          backgroundImage: documents[index]['gender'] == 'male' ?   AssetImage(
+                              'assets/images/user-boy.png') : AssetImage(
+                              'assets/images/user-girl.png'),
+                      ),
+                      title: Text(documents[index]['name']),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(documents[index]['address']),
+                          TextButton(onPressed: () async {
+                            _messageController = TextEditingController(text: '');
+                            _message = '';
+                            await showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(20.0)), //this right here
+                                child: Container(
+                                  height: 200,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(margin: EdgeInsets.only(left: 16),
+                                            child: Text('Send a request message',
+                                                style: TextStyle(
+                                                    fontSize: 14, color: kBlackColor))),
+                                        SizedBox(height: 10),
+                                        RoundedTextField(
+                                          controller: _messageController,
+                                          textInputType: TextInputType.text,
+                                          hint: 'Message',
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceBetween,
+                                          children: <Widget>[
+                                            FlatButton(
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                                _operation = Operation.CANCEL;
+                                              },
+                                              child: Text('CANCEL', style: TextStyle(color: kBorderGreyColor)),
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                _message = _messageController.text.trim();
+                                                FirebaseFirestore.instance.collection('requests').doc().set({
+                                                  'user-id': documents[index].id,
+                                                  'requested-by': UserData.userId,
+                                                  'message' : _message,
+                                                  'accepted' : false,
+                                                  'rejected' : false,
+                                                  'username' : UserData.name,
+                                                }).whenComplete(() => Navigator.pop(context));
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 16),
+                                                width: 100,
+                                                decoration: BoxDecoration(
+                                                    color: kPurpleColor,
+                                                    gradient: LinearGradient(colors: [
+                                                      const Color(0xFFFF2156),
+                                                      const Color(0xFFFF4D4D),
+                                                    ]),
+                                                    borderRadius: BorderRadius.circular(
+                                                        30)),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(12.0),
+                                                  child: Text(
+                                                    'OK',
+                                                    style: TextStyle(
+                                                        color: kWhiteColor,
+                                                        fontSize: 14
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+
+                          }, child: Text('Ask for help'))
+                        ],
+                      ),
+                      trailing: CircleAvatar(
+                        backgroundColor: kSoftPurpleColor,
+                        child: Text(documents[index]['blood_group'], style: TextStyle(
+                          color: kBlackColor,
+                          fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                    Divider()
+                  ],
+                );
+              },
+            );
+      } else {
+        return Text('Something went wrong!');
+      }
+    }
+        )
       ),
     );
   }

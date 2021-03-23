@@ -20,6 +20,9 @@ import 'package:organize_flutter_project/src/views/ui/profile.dart';
 import 'package:organize_flutter_project/src/views/utils/contants.dart';
 import 'package:organize_flutter_project/src/views/utils/reusable_widgets.dart';
 
+import '../../business_logic/utils/contants.dart';
+import '../utils/contants.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -271,14 +274,20 @@ class _HomeState extends State<Home> {
                 ),
                 IconButton(
                     icon: Badge(
-                      badgeContent: Text(
-                        _homeModel == null
-                            ? ''
-                            : _homeModel.totalNotifications.toString(),
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: kWhiteColor,
-                            fontWeight: FontWeight.bold),
+                      badgeContent: StreamBuilder(
+                          stream: FirebaseFirestore.instance.collection('requests').where('user-id', isEqualTo: UserData.userId).snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final List<DocumentSnapshot> documents = snapshot.data.docs;
+                              return Text(documents.length.toString(),
+                                  style: TextStyle(
+                                      fontSize: 14, color: kBlackColor, fontWeight: FontWeight.bold));
+                            } else {
+                              return Text('0',
+                                  style: TextStyle(
+                                      fontSize: 14, color: kBlackColor, fontWeight: FontWeight.bold));
+                            }
+                          }
                       ),
                       badgeColor: Colors.amber,
                       child: Icon(
