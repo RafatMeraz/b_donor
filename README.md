@@ -1,6 +1,7 @@
 # B Donor
 People will be connecting with each other to find or donate blood for saving life. An app to remove all blood donating/receiving crisis including features of getting user updates, health suggestions, which will create an environment of the best blood donating social platform at any emergency.
 
+
 ### Main Features that app will cover:
   - Donate Blood
   - Search Blood Donor
@@ -27,6 +28,7 @@ People will be connecting with each other to find or donate blood for saving lif
   - Can post pictures.
   - Social Media Share.
   
+
 -	**Feedback system**
     -	When a donor donate blood, and the user who received it will put him a feedback with a satisfaction of level.
     - This will be added to users profile as badge or as rating. Also all time & overall rating.
@@ -37,6 +39,7 @@ People will be connecting with each other to find or donate blood for saving lif
     -	The app will show the donors about the food suggestion that what should s/he eats to get healthy & which are essential for blood donating.
     - Daily value, nutrition fact, other benefits, limitations etc. all kind of information will be shown.
     - Also motivational thing for this kind of issue can be added.
+
 -	**Exercise Suggestion**
     -	This will help with basic exercise suggestion.
     - showing basic steps & directions, limits, with their benefits.
