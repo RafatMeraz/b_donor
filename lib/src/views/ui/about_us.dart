@@ -54,10 +54,10 @@ class AboutUs extends StatelessWidget {
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: kGreyColor,
-                  backgroundImage: AssetImage('assets/images/1.jpg'),
+                  child: Icon(Icons.person_outline),
                 ),
-                title: Text('Md Rafat Jamader Maraz'),
-                subtitle: Text('Email : razhossain201@gmail.com'),
+                title: Text('Mariam Rahman'),
+                subtitle: Text('Email : 17201046@uap-bd.edu'),
               ),
             ],
           ),
