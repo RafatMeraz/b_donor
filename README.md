@@ -27,7 +27,10 @@ People will be connecting with each other to find or donate blood for saving lif
   - From profile, one can update activity about donating/receiving blood.
   - Can post pictures.
   - Social Media Share.
-  
+
+-	**Recommendation system**
+    -	The most useful feature of this app is recommendation system. Machine Learning model has been used in it
+    - With the recommendation system, user find the donors very fast based on their availability, location, and most importantly by analysing their records.
 
 -	**Feedback system**
     -	When a donor donate blood, and the user who received it will put him a feedback with a satisfaction of level.
