@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:organize_flutter_project/src/business_logic/services/firebase_services/firebase_services.dart';
 import 'package:organize_flutter_project/src/business_logic/utils/contants.dart';
@@ -302,8 +303,10 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: PinCodeTextField(
         length: 6,
-        textInputType: TextInputType.number,
-        obsecureText: false,
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        ],
         animationType: AnimationType.none,
         validator: (v) {},
         pinTheme: PinTheme(
@@ -336,7 +339,7 @@ class _VerifyMobileNumberState extends State<VerifyMobileNumber> {
         beforeTextPaste: (text) {
           print("Allowing to paste $text");
           return true;
-        },
+        }, appContext: context,
       ),
     );
   }

@@ -100,9 +100,9 @@ class FirebaseServices {
     try {
       var urlOfImage;
       if (file != null) {
-        StorageReference reference = _storage.ref().child("posts/");
-        StorageUploadTask uploadTask = reference.child(file.absolute.path.split('/').last).putFile(file);
-        StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+        var reference = _storage.ref().child("posts/");
+        var uploadTask = reference.child(file.absolute.path.split('/').last).putFile(file);
+        final taskSnapshot = await uploadTask;
         urlOfImage = await taskSnapshot.ref.getDownloadURL();
       }
       await fireStoreInstance.collection('users').doc(uid).get().then((doc) async {
